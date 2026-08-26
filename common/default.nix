@@ -1,6 +1,8 @@
 { pkgs, ... }:
 
 {
+  imports = [ ./desktop.nix ];
+
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
@@ -9,6 +11,11 @@
   nixpkgs.config.allowUnfree = true;
 
   networking.networkmanager.enable = true;
+
+  hardware.bluetooth.enable = true;
+
+  services.tuned.enable = true;
+  services.upower.enable = true;
 
   time.timeZone = "Europe/Amsterdam";
 
@@ -54,7 +61,11 @@
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
-  home-manager.sharedModules = [ ./shell.nix ];
+  home-manager.sharedModules = [
+    ./shell.nix
+    ./hyprland.nix
+  ];
+  home-manager.backupFileExtension = "bak";
 
   # Lets unpatched dynamically linked binaries run (VS Code servers, language servers, ...)
   programs.nix-ld.enable = true;

@@ -1,11 +1,12 @@
 {
   inputs = {
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     home-manager = {
-      url = "github:nix-community/home-manager/release-26.05";
+      url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
+    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
   };
 
   outputs =
@@ -13,6 +14,7 @@
       nixpkgs,
       home-manager,
       vscode-server,
+      chaotic,
       ...
     }:
     {
@@ -22,6 +24,8 @@
           ./hosts/hyperv
           ./common
           ./user
+          chaotic.nixosModules.nyx-cache
+          chaotic.nixosModules.nyx-overlay
           vscode-server.nixosModules.default
           home-manager.nixosModules.home-manager
           {

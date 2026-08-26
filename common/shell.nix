@@ -57,10 +57,6 @@ in
         name = "puffer";
         src = pkgs.fishPlugins.puffer.src;
       }
-      {
-        name = "sponge";
-        src = pkgs.fishPlugins.sponge.src;
-      }
     ];
   };
 
