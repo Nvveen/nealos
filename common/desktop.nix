@@ -1,5 +1,5 @@
 # Minimal Wayland desktop: Hyprland (via UWSM) with SDDM as the greeter.
-{ pkgs, ... }:
+{ inputs, pkgs, ... }:
 
 {
   programs.hyprland = {
@@ -12,5 +12,16 @@
     wayland.enable = true;
   };
 
-  environment.systemPackages = [ pkgs.foot ];
+  environment.systemPackages = [
+    pkgs.foot
+    inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
+  ];
+
+  home-manager.sharedModules = [
+    inputs.noctalia.homeModules.default
+  ];
+
+  programs.noctalia = {
+    enable = true;
+  };
 }

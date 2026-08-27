@@ -32,11 +32,12 @@ local menu        = "hyprlauncher"
 -- Autostart necessary processes (like notifications daemons, status bars, etc.)
 -- Or execute your favorite apps at launch like this:
 --
--- hl.on("hyprland.start", function ()
+hl.on("hyprland.start", function ()
+    hl.exec_cmd("noctalia")
 --   hl.exec_cmd(terminal)
 --   hl.exec_cmd("nm-applet")
 --   hl.exec_cmd("waybar & hyprpaper & firefox")
--- end)
+end)
 
 
 -------------------------------
@@ -57,11 +58,13 @@ hl.env("HYPRCURSOR_SIZE", "24")
 -- Please note permission changes here require a Hyprland restart and are not applied on-the-fly
 -- for security reasons
 
--- hl.config({
---   ecosystem = {
---     enforce_permissions = true,
---   },
--- })
+hl.config({
+  ecosystem = {
+    -- enforce_permissions = true,
+    no_update_news = true;
+    no_donation_nag = true;
+  },
+})
 
 -- hl.permission("/usr/(bin|local/bin)/grim", "screencopy", "allow")
 -- hl.permission("/usr/(lib|libexec|lib64)/xdg-desktop-portal-hyprland", "screencopy", "allow")
@@ -76,31 +79,14 @@ hl.env("HYPRCURSOR_SIZE", "24")
 hl.config({
     general = {
         gaps_in  = 5,
-        gaps_out = 20,
+        gaps_out = 10,
 
         border_size = 2,
-
-        col = {
-            active_border   = { colors = {"rgba(33ccffee)", "rgba(00ff99ee)"}, angle = 45 },
-            inactive_border = "rgba(595959aa)",
-        },
-
-        -- Set to true to enable resizing windows by clicking and dragging on borders and gaps
-        resize_on_border = false,
-
-        -- Please see https://wiki.hypr.land/Configuring/Advanced-and-Cool/Tearing/ before you turn this on
-        allow_tearing = false,
-
-        layout = "dwindle",
     },
 
     decoration = {
-        rounding       = 10,
+        rounding       = 20,
         rounding_power = 2,
-
-        -- Change transparency of focused and unfocused windows
-        active_opacity   = 1.0,
-        inactive_opacity = 1.0,
 
         shadow = {
             enabled      = true,
@@ -112,13 +98,9 @@ hl.config({
         blur = {
             enabled   = true,
             size      = 3,
-            passes    = 1,
+            passes    = 2,
             vibrancy  = 0.1696,
         },
-    },
-
-    animations = {
-        enabled = true,
     },
 })
 
@@ -195,8 +177,8 @@ hl.config({
 
 hl.config({
     misc = {
-        force_default_wallpaper = -1,    -- Set to 0 or 1 to disable the anime mascot wallpapers
-        disable_hyprland_logo   = false, -- If true disables the random hyprland logo / anime girl background. :(
+        force_default_wallpaper = 0,    -- Set to 0 or 1 to disable the anime mascot wallpapers
+        disable_hyprland_logo   = true, -- If true disables the random hyprland logo / anime girl background. :(
     },
 })
 
@@ -244,7 +226,7 @@ hl.device({
 local mainMod = "SUPER" -- Sets "Windows" key as main modifier
 
 -- Example binds, see https://wiki.hypr.land/Configuring/Basics/Binds/ for more
-hl.bind(mainMod .. " + Q", hl.dsp.exec_cmd(terminal))
+hl.bind(mainMod .. " + Return", hl.dsp.exec_cmd(terminal))
 local closeWindowBind = hl.bind(mainMod .. " + C", hl.dsp.window.close())
 -- closeWindowBind:set_enabled(false)
 hl.bind(mainMod .. " + M", hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch 'hl.dsp.exit()'"))

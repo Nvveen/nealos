@@ -62,8 +62,8 @@
   users.defaultUserShell = pkgs.fish;
 
   home-manager.sharedModules = [
-    ./shell.nix
-    ./hyprland.nix
+    ../home
+    ./hypr/hyprland.nix
   ];
   home-manager.backupFileExtension = "bak";
 
