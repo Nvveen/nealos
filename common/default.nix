@@ -45,6 +45,7 @@
     git
     nil
     nixfmt
+    ddcutil # brightness control
   ];
 
   programs.neovim = {

@@ -1,0 +1,121 @@
+config_version = 13
+
+[bar.default]
+capsule = true
+end = [
+    "tray",
+    "notifications",
+    "clipboard",
+    "network",
+    "bluetooth",
+    "volume",
+    "brightness",
+    "battery",
+    "control-center",
+    "session"
+]
+margin_ends = 0
+padding = 28
+radius = 0
+widget_spacing = 12
+
+[calendar]
+enabled = true
+
+[desktop_widgets]
+schema_version = 2
+widget_order = [ "desktop-widget-0000000000000001", "desktop-widget-0000000000000002" ]
+
+    [desktop_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [desktop_widgets.widget.desktop-widget-0000000000000001]
+    box_height = 96.0
+    box_width = 368.0
+    cx = 192.0
+    cy = 1020.0
+    output = "Virtual-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "weather"
+
+    [desktop_widgets.widget.desktop-widget-0000000000000002]
+    box_height = 0.0
+    box_width = 0.0
+    cx = 1596.0
+    cy = 857.0
+    output = "Virtual-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "calendar"
+
+[location]
+address = "Amsterdam"
+
+[lockscreen_widgets]
+enabled = false
+schema_version = 2
+widget_order = [ "lockscreen-login-box@Virtual-1" ]
+
+    [lockscreen_widgets.grid]
+    cell_size = 16
+    major_interval = 4
+    visible = true
+
+    [lockscreen_widgets.widget."lockscreen-login-box@Virtual-1"]
+    box_height = 196.0
+    box_width = 810.0
+    cx = 960.0
+    cy = 898.0
+    output = "Virtual-1"
+    placement_height = 1080.0
+    placement_width = 1920.0
+    rotation = 0.0
+    type = "login_box"
+
+        [lockscreen_widgets.widget."lockscreen-login-box@Virtual-1".settings]
+        background_color = "surface_variant"
+        background_opacity = 0.88
+        background_radius = 12.0
+        center_password_text = false
+        input_opacity = 1.0
+        input_radius = 6.0
+        layout = "regular"
+        show_caps_lock = true
+        show_keyboard_layout = true
+        show_login_button = true
+        show_media = true
+        show_session_buttons = true
+        show_unlock_hint = true
+        show_weather = true
+
+[shell]
+app_icon_colorize = true
+corner_radius_scale = 0.0
+panel_anchor_bar = "default"
+polkit_agent = true
+
+    [shell.screen_corners]
+    size = 1
+
+[theme]
+community_palette = "Osaka jade"
+source = "community"
+
+    [theme.templates]
+    builtin_ids = [ "foot", "hyprland", "starship" ]
+    community_ids = [ "pywalfox", "pywalfox-beta4", "discord", "gimp", "inkscape", "neovim", "vscode", "steam" ]
+
+[wallpaper.default]
+path = "/nix/store/rmw885ky9nhxx80x09ii599vg0lgnwqm-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+
+[wallpaper.last]
+path = "/nix/store/rmw885ky9nhxx80x09ii599vg0lgnwqm-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+
+[widget.network]
+show_label = false
+show_vpn_label = true
