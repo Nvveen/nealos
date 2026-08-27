@@ -38,6 +38,7 @@
 
   home-manager.sharedModules = [
     inputs.noctalia.homeModules.default
+    ./theming
   ];
 
   programs.noctalia = {

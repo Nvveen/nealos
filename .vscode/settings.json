@@ -1,11 +1,11 @@
 {
     "nix.formatterPath": "nixfmt",
     "nix.enableLanguageServer": true,
-    "nix.serverPath": "nil",
+    "nix.serverPath": "nixd",
     "terminal.integrated.fontFamily": "'JetBrainsMono Nerd Font Mono', monospace",
     "terminal.integrated.defaultProfile.linux": "fish",
     "[nix]": {
         "editor.defaultFormatter": "jnoortheen.nix-ide",
-        "editor.formatOnSave": true
+        "editor.formatOnSave": false
     }
 }

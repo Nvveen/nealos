@@ -9,7 +9,10 @@
     nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
     noctalia = {
       url = "github:noctalia-dev/noctalia";
-      inputs.nixpkgs.follows = "nixpkgs"; # this line is optional, prevents downloading two versions of nixpkgs but disables cache
+    };
+    community-palettes = {
+      url = "github:noctalia-dev/community-palettes";
+      flake = false;
     };
   };
 
@@ -34,6 +37,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+            home-manager.extraSpecialArgs = { inherit inputs; };
           }
           {
             nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];

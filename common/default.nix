@@ -40,12 +40,13 @@
 
   # Packages every machine gets. To search: nix search nixpkgs <term>
   environment.systemPackages = with pkgs; [
-    neovim
-    wget
-    git
-    nil
-    nixfmt
     ddcutil # brightness control
+    firefox
+    git
+    neovim
+    nixd
+    nixfmt
+    wget
   ];
 
   programs.neovim = {

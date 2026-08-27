@@ -110,11 +110,21 @@ source = "community"
     builtin_ids = [ "foot", "hyprland", "starship" ]
     community_ids = [ "pywalfox", "pywalfox-beta4", "discord", "gimp", "inkscape", "neovim", "vscode", "steam" ]
 
-[wallpaper.default]
-path = "/nix/store/rmw885ky9nhxx80x09ii599vg0lgnwqm-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+[wallpaper]
+directory = "/home/neal/.config/themes/osaka-jade/backgrounds"
 
-[wallpaper.last]
-path = "/nix/store/rmw885ky9nhxx80x09ii599vg0lgnwqm-noctalia-5.0.0/share/noctalia/assets/noctalia-wallpaper.png"
+    [wallpaper.automation]
+    enabled = true
+    interval_seconds = 3600
+
+    [wallpaper.default]
+    path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg-2.jpg"
+
+    [wallpaper.last]
+    path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg-2.jpg"
+
+    [wallpaper.monitors.Virtual-1]
+    path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg-2.jpg"
 
 [widget.network]
 show_label = false
