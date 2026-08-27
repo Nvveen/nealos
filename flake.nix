@@ -6,7 +6,7 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     vscode-server.url = "github:nix-community/nixos-vscode-server";
-    chaotic.url = "github:chaotic-cx/nyx/nyxpkgs-unstable";
+    nix-cachyos-kernel.url = "github:xddxdd/nix-cachyos-kernel/release";
   };
 
   outputs =
@@ -14,7 +14,7 @@
       nixpkgs,
       home-manager,
       vscode-server,
-      chaotic,
+      nix-cachyos-kernel,
       ...
     }:
     {
@@ -24,13 +24,16 @@
           ./hosts/hyperv
           ./common
           ./user
-          chaotic.nixosModules.nyx-cache
-          chaotic.nixosModules.nyx-overlay
           vscode-server.nixosModules.default
           home-manager.nixosModules.home-manager
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
+          }
+          {
+            nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
+            nix.settings.substituters = [ "https://attic.xuyh0120.win/lantian" ];
+            nix.settings.trusted-public-keys = [ "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc=" ];
           }
         ];
       };
