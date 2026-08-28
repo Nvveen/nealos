@@ -45,4 +45,14 @@
     enable = true;
     recommendedServices.enable = true;
   };
+
+  programs.firefox = {
+    enable = true;
+    policies.extensionSettings = {
+      "pywalfox@frewacom.org" = {
+        installation_mode = "force_installed";
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/pywalfox/latest.xpi";
+      };
+    };
+  };
 }

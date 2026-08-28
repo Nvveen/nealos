@@ -43,6 +43,7 @@
     ddcutil # brightness control
     firefox
     git
+    jq
     neovim
     nixd
     nixfmt
