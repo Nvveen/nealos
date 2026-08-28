@@ -46,6 +46,7 @@
     neovim
     nixd
     nixfmt
+    pywalfox-native # firefox with plugin
     wget
   ];
 
