@@ -1,4 +1,9 @@
-{ inputs, pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  nealosSplash,
+  ...
+}:
 let
   p = builtins.fromJSON (builtins.readFile "${inputs.community-palettes}/Osaka jade/Osaka jade.json");
   c = p.dark;
@@ -10,18 +15,20 @@ in
 
   services.displayManager.sddm.settings.Theme.CursorTheme = "Bibata-Modern-Classic";
 
+  environment.systemPackages = [ pkgs.bibata-cursors ];
+
   programs.silentSDDM = {
     enable = true;
     theme = "rei";
-    backgrounds.jade = ./themes/osaka-jade/backgrounds/osaka-jade-bg.jpg;
+    backgrounds.jade = nealosSplash;
     settings = {
       # Backgrounds: referenced by FILENAME as copied into backgrounds/.
       # rei defaults to rei.mp4 for both screens.
       "LockScreen" = {
-        background = "osaka-jade-bg.jpg";
+        background = "splash.png";
         blur = 0; # rei sets 32
       };
-      "LoginScreen".background = "osaka-jade-bg.jpg";
+      "LoginScreen".background = "splash.png";
 
       "LockScreen.Clock".color = c.mOnSurface;
       "LockScreen.Date".color = c.mOnSurfaceVariant;

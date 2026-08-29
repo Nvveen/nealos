@@ -7,15 +7,9 @@
 {
   imports = [
     ./theming/sddm.nix
+    ./theming/plymouth
   ];
 
-  boot.plymouth = {
-    enable = true;
-    theme = "rings";
-    themePackages = [
-      (pkgs.adi1090x-plymouth-themes.override { selected_themes = [ "rings" ]; })
-    ];
-  };
   boot.kernelParams = [
     "quiet"
     "systemd.show_status=false"
