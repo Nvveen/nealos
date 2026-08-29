@@ -5,6 +5,10 @@
 }:
 
 {
+  imports = [
+    ./theming/sddm.nix
+  ];
+
   boot.plymouth = {
     enable = true;
     theme = "rings";
@@ -23,12 +27,6 @@
   programs.hyprland = {
     enable = true;
     withUWSM = true;
-  };
-
-  services.displayManager.sddm = {
-    enable = true;
-    wayland.enable = true;
-    theme = "nordic";
   };
 
   environment.systemPackages = [

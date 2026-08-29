@@ -14,6 +14,10 @@
       url = "github:noctalia-dev/community-palettes";
       flake = false;
     };
+    silentSDDM = {
+      url = "github:uiriansan/SilentSDDM";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
