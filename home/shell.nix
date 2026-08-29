@@ -27,6 +27,12 @@ in
       nrs = "sudo nixos-rebuild switch --flake ~/nealxos#nealxos";
       nrt = "sudo nixos-rebuild test --flake ~/nealxos#nealxos";
       nfu = "nix flake update --flake ~/nealxos";
+
+      ls = "eza";
+      ll = "eza -l --git";
+      la = "eza -la --git";
+      lt = "eza --tree --level=2";
+      cat = "bat";
     };
 
     interactiveShellInit = ''
@@ -77,6 +83,9 @@ in
     enable = true;
     nix-direnv.enable = true;
   };
+
+  programs.delta.enable = true;
+  programs.delta.enableGitIntegration = true;
 
   programs.starship = {
     enable = true;

@@ -1,7 +1,10 @@
-{ pkgs, ... }:
+{ pkgs, lib, ... }:
 
 {
   imports = [ ./desktop.nix ];
+
+  boot.initrd.systemd.enable = true;
+  boot.loader.timeout = 0;
 
   nix.settings.experimental-features = [
     "nix-command"
@@ -14,8 +17,8 @@
 
   hardware.bluetooth.enable = true;
 
-  services.tuned.enable = true;
-  services.upower.enable = true;
+  services.tuned.enable = lib.mkDefault true;
+  services.upower.enable = lib.mkDefault true;
 
   time.timeZone = "Europe/Amsterdam";
 
@@ -40,23 +43,17 @@
 
   # Packages every machine gets. To search: nix search nixpkgs <term>
   environment.systemPackages = with pkgs; [
+    btop
     ddcutil # brightness control
     firefox
     git
     jq
-    neovim
     nixd
     nixfmt
     pywalfox-native # firefox with plugin
+    ripgrep
     wget
   ];
-
-  programs.neovim = {
-    enable = true;
-    defaultEditor = true;
-    viAlias = true;
-    vimAlias = true;
-  };
 
   # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
   fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
@@ -67,7 +64,8 @@
 
   home-manager.sharedModules = [
     ../home
-    ./hypr/hyprland.nix
+    ./hypr
+    ./noctalia
   ];
   home-manager.backupFileExtension = "bak";
 

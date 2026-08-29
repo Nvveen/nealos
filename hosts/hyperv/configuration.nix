@@ -8,6 +8,8 @@
 
   boot.initrd.kernelModules = [ "hyperv_drm" ];
 
+  services.tuned.enable = false;
+
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
   networking.hostName = "nealxos";
