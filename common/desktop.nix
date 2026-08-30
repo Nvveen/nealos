@@ -42,10 +42,16 @@
 
   programs.firefox = {
     enable = true;
-    policies.extensionSettings = {
+    policies.ExtensionSettings = {
       "pywalfox@frewacom.org" = {
         installation_mode = "force_installed";
         install_url = "https://addons.mozilla.org/firefox/downloads/latest/pywalfox/latest.xpi";
+      };
+      "uBlock0@raymondhill.net" = {
+        install_url = "https://addons.mozilla.org/firefox/downloads/latest/ublock-origin/latest.xpi";
+        installation_mode = "force_installed";
+        default_area = "menupanel";
+        private_browsing = true;
       };
     };
   };

@@ -45,7 +45,6 @@
   environment.systemPackages = with pkgs; [
     btop
     ddcutil # brightness control
-    firefox
     git
     jq
     nixd
