@@ -33,7 +33,7 @@ let
     );
 in
 {
-  imports = [ ./firefox.nix ];
+  imports = [ ./firefox.nix ./gtk.nix ];
 
   xdg.configFile = lib.mkMerge (map luaFor names);
 }

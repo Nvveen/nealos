@@ -59,4 +59,6 @@
       Restart = "on-failure";
     };
   };
+
+  programs.dconf.enable = true;
 }
