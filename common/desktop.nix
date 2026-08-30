@@ -32,6 +32,7 @@
   home-manager.sharedModules = [
     inputs.noctalia.homeModules.default
     ./theming
+    ./bitwarden.nix
   ];
 
   programs.noctalia = {

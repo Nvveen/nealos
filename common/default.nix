@@ -43,8 +43,6 @@
 
   # Packages every machine gets. To search: nix search nixpkgs <term>
   environment.systemPackages = with pkgs; [
-    bitwarden-cli
-    bitwarden-desktop
     btop
     ddcutil # brightness control
     firefox

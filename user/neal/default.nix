@@ -9,6 +9,7 @@
       "wheel"
     ];
     # packages = with pkgs; [ ];
+    openssh.authorizedKeys.keys = [ "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGC8kNuZ6WSdY6yo6SYE/jdKrXUiG/X/14tfs26OGkbq" ];
   };
 
   home-manager.users."neal" = import ./home.nix;

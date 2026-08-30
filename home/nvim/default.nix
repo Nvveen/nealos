@@ -2,6 +2,9 @@
 {
   imports = [ inputs.lazyvim.homeManagerModules.default ];
 
+  home.sessionVariables.EDITOR = "nvim";
+  systemd.user.sessionVariables.EDITOR = "nvim";
+
   programs.lazyvim = {
     enable = true;
 
