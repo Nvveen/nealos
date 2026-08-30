@@ -1,4 +1,4 @@
-{ pkgs, ... }:
+{ ... }:
 
 {
   users.users."neal" = {
@@ -8,7 +8,7 @@
       "networkmanager"
       "wheel"
     ];
-    packages = with pkgs; [ ];
+    # packages = with pkgs; [ ];
   };
 
   home-manager.users."neal" = import ./home.nix;
