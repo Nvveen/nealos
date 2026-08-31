@@ -4,5 +4,6 @@
     ./configuration.nix
     ../../modules/base
     ../../modules/desktop/nixos
+    ../../modules/profiles/development/nixos
   ];
 }
