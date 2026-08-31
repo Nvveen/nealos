@@ -42,6 +42,7 @@ in
       nrs = "sudo nixos-rebuild switch --flake ~/nealxos#nealxos";
       nrt = "sudo nixos-rebuild test --flake ~/nealxos#nealxos";
       nfu = "nix flake update --flake ~/nealxos";
+      nos = "nh os switch ~/nealxos";
 
       ls = "eza";
       ll = "eza -l --git";
