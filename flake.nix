@@ -38,7 +38,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/hyperv
-          ./user
           vscode-server.nixosModules.default
           home-manager.nixosModules.home-manager
           {
@@ -62,12 +61,7 @@
       homeConfigurations.neal = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          ./dotfiles
-          {
-            home.username = "neal";
-            home.homeDirectory = "/home/neal";
-            home.stateVersion = "26.05";
-          }
+          ./users/neal/home.nix
         ];
       };
     };

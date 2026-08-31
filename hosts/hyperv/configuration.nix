@@ -1,4 +1,4 @@
-# Machine-specific settings for the `vmware` host. Shared settings live in ../../common.
+# Machine-specific settings for the `hyperv` host. Shared settings live under ../../modules.
 
 { pkgs, ... }:
 

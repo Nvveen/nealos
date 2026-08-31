@@ -5,5 +5,6 @@
     ../../modules/base
     ../../modules/desktop/nixos
     ../../modules/profiles/development/nixos
+    ../../users/neal/nixos.nix
   ];
 }
