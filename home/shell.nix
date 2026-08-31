@@ -13,14 +13,15 @@ let
 in
 {
   home.packages = with pkgs; [
-    fd # find, but sane defaults and gitignore-aware
-    ripgrep # grep, fast, gitignore-aware
     bat # cat with syntax highlighting
-    eza # ls with colours and --tree
-    dust # du that shows what's actually big
-    sd # sed without the escaping
     delta # diff viewer, used by lazygit
+    dust # du that shows what's actually big
+    eza # ls with colours and --tree
+    fd # find, but sane defaults and gitignore-aware
     lazygit
+    ripgrep # grep, fast, gitignore-aware
+    sd # sed without the escaping
+    tree
   ];
 
   programs.fish = {
