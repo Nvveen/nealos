@@ -14,7 +14,7 @@ let
       c = p.dark;
       hex = v: lib.removePrefix "#" v;
       s = slug name;
-      localDir = ./themes + "/${s}/backgrounds";
+      localDir = ../../themes + "/${s}/backgrounds";
     in
     (
       {

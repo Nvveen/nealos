@@ -7,8 +7,8 @@
 
 {
   imports = [
-    ./theming/sddm.nix
-    ./theming/plymouth
+    ./sddm.nix
+    ./plymouth
   ];
 
   networking.networkmanager.enable = true;
@@ -48,10 +48,7 @@
 
   home-manager.sharedModules = [
     inputs.noctalia.homeModules.default
-    ./hypr
-    ./noctalia
-    ./theming
-    ./bitwarden.nix
+    ../home
   ];
 
   programs.noctalia = {
