@@ -7,3 +7,10 @@ enable_community_templates = true
 [theme.templates.user.starship]
 input_path = "$XDG_CONFIG_HOME/noctalia/starship.toml.tpl"
 output_path = "$XDG_DATA_HOME/starship/starship.toml"
+
+# foot can't reload its config, but responds to OSC sequences. The post_hook
+# writes them to every open pty.
+[theme.templates.user.terminal-sequences]
+input_path = "$XDG_CONFIG_HOME/noctalia/terminal-sequences"
+output_path = "$XDG_CACHE_HOME/terminal-sequences"
+post_hook = "tee /dev/pts/[0-9]* < ~/.cache/terminal-sequences"

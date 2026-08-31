@@ -52,6 +52,8 @@ in
     };
 
     interactiveShellInit = ''
+      test -f ~/.cache/terminal-sequences && cat ~/.cache/terminal-sequences
+
       set -g fish_greeting ""
 
       fish_vi_key_bindings
