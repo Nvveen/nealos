@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   pkgs,
   ...
 }:
@@ -9,6 +10,17 @@
     ./theming/sddm.nix
     ./theming/plymouth
   ];
+
+  networking.networkmanager.enable = true;
+
+  hardware.bluetooth.enable = true;
+
+  services.upower.enable = lib.mkDefault true;
+
+  services.xserver.xkb = {
+    layout = "us";
+    variant = "";
+  };
 
   boot.kernelParams = [
     "quiet"
@@ -24,13 +36,20 @@
   };
 
   environment.systemPackages = [
+    pkgs.ddcutil
     pkgs.foot
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     pkgs.hyprpolkitagent
+    pkgs.pywalfox-native
   ];
+
+  # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
+  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
 
   home-manager.sharedModules = [
     inputs.noctalia.homeModules.default
+    ./hypr
+    ./noctalia
     ./theming
     ./bitwarden.nix
   ];

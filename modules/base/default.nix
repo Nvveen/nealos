@@ -1,8 +1,6 @@
 { pkgs, lib, ... }:
 
 {
-  imports = [ ./desktop.nix ];
-
   boot.initrd.systemd.enable = true;
   boot.loader.timeout = 0;
 
@@ -13,12 +11,7 @@
 
   nixpkgs.config.allowUnfree = true;
 
-  networking.networkmanager.enable = true;
-
-  hardware.bluetooth.enable = true;
-
   services.tuned.enable = lib.mkDefault true;
-  services.upower.enable = lib.mkDefault true;
 
   time.timeZone = "Europe/Amsterdam";
 
@@ -36,35 +29,23 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  services.xserver.xkb = {
-    layout = "us";
-    variant = "";
-  };
-
   # Packages every machine gets. To search: nix search nixpkgs <term>
   environment.systemPackages = with pkgs; [
     btop
-    ddcutil # brightness control
     git
     jq
     nixd
     nixfmt
-    pywalfox-native # firefox with plugin
     ripgrep
     wget
   ];
-
-  # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
-  fonts.packages = [ pkgs.nerd-fonts.jetbrains-mono ];
 
   # Required so fish lands in /etc/shells and gets its system-wide completions/vendor setup.
   programs.fish.enable = true;
   users.defaultUserShell = pkgs.fish;
 
   home-manager.sharedModules = [
-    ../dotfiles
-    ./hypr
-    ./noctalia
+    ../../dotfiles
   ];
   home-manager.backupFileExtension = "bak";
 

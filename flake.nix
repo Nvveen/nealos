@@ -38,7 +38,6 @@
         specialArgs = { inherit inputs; };
         modules = [
           ./hosts/hyperv
-          ./common
           ./user
           vscode-server.nixosModules.default
           home-manager.nixosModules.home-manager
