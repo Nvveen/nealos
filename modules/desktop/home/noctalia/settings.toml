@@ -130,8 +130,9 @@ mode = "dark"
 source = "community"
 
 [theme.templates]
-builtin_ids = ["foot", "gtk3", "gtk4", "hyprland", "qt"]
+builtin_ids = ["btop", "foot", "gtk3", "gtk4", "hyprland", "qt"]
 community_ids = [
+    "fzf",
     "discord",
     "gimp",
     "hyprtoolkit",
