@@ -327,17 +327,15 @@ hl.layer_rule({
     blur_popups = true
 })
 
+-- Colours come from noctalia's built-in Hyprland template, rendered to
+-- ~/.config/hypr/noctalia.lua whenever the palette changes. It applies border
+-- and group colours itself and returns the palette for our own use.
+-- pcall because the file does not exist until noctalia has rendered once.
 local cfgdir = os.getenv("XDG_CONFIG_HOME") or os.getenv("HOME") .. "/.config"
-local theme = os.getenv("NEALXOS_THEME") or "osaka-jade"
-local c = dofile(cfgdir .. "/themes/" .. theme .. "/colors.lua")
+local ok, noctalia = pcall(dofile, cfgdir .. "/hypr/noctalia.lua")
 
-hl.config({
-    general = {
-        col = {
-            active_border = {
-                colors = {"rgba(" .. c.primary .. "33)"},
-                angle = 45
-            }
-        }
-    }
-})
+if ok then
+    noctalia.apply_theme()
+else
+    hl.notify("Noctalia theme not found, using default Hyprland theme", "error")
+end

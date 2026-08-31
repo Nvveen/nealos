@@ -1,9 +1,11 @@
-{ inputs, lib, pkgs, ... }:
+{
+  palette,
+  lib,
+  pkgs,
+  ...
+}:
 let
-  palette = builtins.fromJSON (
-    builtins.readFile "${inputs.community-palettes}/Osaka jade/Osaka jade.json"
-  );
-  c = palette.dark;
+  c = palette.colors;
   g = import ./geometry.nix;
 
   # Plymouth's two-step module wants 0xRRGGBB; the palette gives #RRGGBB.
@@ -40,22 +42,44 @@ let
     SPLASHY = toString g.splashY;
   };
 
-  theme = pkgs.runCommand "nealos-plymouth" (env // {
-    nativeBuildInputs = [ pkgs.resvg pkgs.oxipng pkgs.envsubst pkgs.gawk ];
-  }) ''
-    export OUTDIR=$out/share/plymouth/themes/nealos
-    bash ${./build.sh}
-  '';
+  theme =
+    pkgs.runCommand "nealos-plymouth"
+      (
+        env
+        // {
+          nativeBuildInputs = [
+            pkgs.resvg
+            pkgs.oxipng
+            pkgs.envsubst
+            pkgs.gawk
+          ];
+        }
+      )
+      ''
+        export OUTDIR=$out/share/plymouth/themes/nealos
+        bash ${./build.sh}
+      '';
 
   # Full-screen still, same mark, for the SDDM background.
   # Named splash.png because silentSDDM copies derivations by their `name`.
-  splash = pkgs.runCommand "splash.png" (env // {
-    nativeBuildInputs = [ pkgs.resvg pkgs.oxipng pkgs.envsubst pkgs.gawk ];
-  }) ''
-    XMID=$(awk "BEGIN{print ($XLEFT+$XRIGHT)/2}") envsubst < ${./splash.svg.tpl} > s.svg
-    resvg s.svg $out
-    oxipng -o 4 --strip safe $out
-  '';
+  splash =
+    pkgs.runCommand "splash.png"
+      (
+        env
+        // {
+          nativeBuildInputs = [
+            pkgs.resvg
+            pkgs.oxipng
+            pkgs.envsubst
+            pkgs.gawk
+          ];
+        }
+      )
+      ''
+        XMID=$(awk "BEGIN{print ($XLEFT+$XRIGHT)/2}") envsubst < ${./splash.svg.tpl} > s.svg
+        resvg s.svg $out
+        oxipng -o 4 --strip safe $out
+      '';
 in
 {
   boot.plymouth = {

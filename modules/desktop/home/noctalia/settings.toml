@@ -130,7 +130,7 @@ mode = "dark"
 source = "community"
 
 [theme.templates]
-builtin_ids = ["foot", "gtk3", "gtk4", "hyprland", "qt", "starship"]
+builtin_ids = ["foot", "gtk3", "gtk4", "hyprland", "qt"]
 community_ids = [
     "discord",
     "gimp",

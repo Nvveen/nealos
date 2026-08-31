@@ -1,12 +1,12 @@
 {
   inputs,
+  palette,
   pkgs,
   nealosSplash,
   ...
 }:
 let
-  p = builtins.fromJSON (builtins.readFile "${inputs.community-palettes}/Osaka jade/Osaka jade.json");
-  c = p.dark;
+  c = palette.colors;
 in
 {
   imports = [
@@ -26,7 +26,7 @@ in
       # rei defaults to rei.mp4 for both screens.
       "LockScreen" = {
         background = "splash.png";
-        blur = 0; # rei sets 32
+        blur = 0;
       };
       "LoginScreen".background = "splash.png";
 

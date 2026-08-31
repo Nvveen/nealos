@@ -1,39 +1,13 @@
-{ inputs, lib, ... }:
-let
-  palettes = inputs.community-palettes;
-
-  dirs = lib.attrNames (lib.filterAttrs (_: t: t == "directory") (builtins.readDir palettes));
-  names = lib.filter (name: builtins.pathExists "${palettes}/${name}/${name}.json") dirs;
-
-  slug = n: lib.toLower (builtins.replaceStrings [ " " ] [ "-" ] n);
-
-  luaFor =
-    name:
-    let
-      p = builtins.fromJSON (builtins.readFile "${palettes}/${name}/${name}.json");
-      c = p.dark;
-      hex = v: lib.removePrefix "#" v;
-      s = slug name;
-      localDir = ../../themes + "/${s}/backgrounds";
-    in
-    (
-      {
-        "themes/${s}/colors.lua" = {
-          text = ''
-            return {
-              primary = "${hex c.mPrimary}",
-              surface = "${hex c.mSurface}",
-            }
-          '';
-        };
-      }
-      // lib.optionalAttrs (builtins.pathExists localDir) {
-        "themes/${s}/backgrounds".source = localDir;
-      }
-    );
-in
+# Colours for the runtime tier come from noctalia's templates, not from here.
+# What this module still owns is the wallpaper artwork, which is ours rather
+# than noctalia's and is tied to the build-time palette.
+{ palette, ... }: # CHANGED: was { palettes, lib, ... }
 {
-  imports = [ ./firefox.nix ./gtk.nix ];
+  imports = [
+    ./firefox.nix
+    ./gtk.nix
+  ];
 
-  xdg.configFile = lib.mkMerge (map luaFor names);
+  xdg.configFile."themes/${palette.name}/backgrounds".source =
+    ../../themes + "/${palette.name}/backgrounds";
 }

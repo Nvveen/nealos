@@ -1,0 +1,9 @@
+[theme.templates]
+enable_builtin_templates = true
+enable_community_templates = true
+
+# The whole starship config, not just a palette fragment — starship has no
+# include mechanism, and palette names don't resolve in the root format string.
+[theme.templates.user.starship]
+input_path = "$XDG_CONFIG_HOME/noctalia/starship.toml.tpl"
+output_path = "$XDG_DATA_HOME/starship/starship.toml"

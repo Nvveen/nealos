@@ -32,10 +32,16 @@
       nix-cachyos-kernel,
       ...
     }@inputs:
+    let
+      palette = import ./lib/palette.nix {
+        inherit inputs;
+        inherit (nixpkgs) lib;
+      };
+    in
     {
       nixosConfigurations.nealxos = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs; };
+        specialArgs = { inherit inputs palette; };
         modules = [
           ./hosts/hyperv
           vscode-server.nixosModules.default
@@ -43,7 +49,7 @@
           {
             home-manager.useGlobalPkgs = true;
             home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs; };
+            home-manager.extraSpecialArgs = { inherit inputs palette; };
           }
           {
             nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
@@ -60,6 +66,7 @@
       };
       homeConfigurations.neal = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = { inherit inputs palette; };
         modules = [
           ./users/neal/home.nix
         ];
