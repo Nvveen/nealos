@@ -3,7 +3,6 @@
   imports = [
     ./shell.nix
     ./starship.nix
-    ./nvim
   ];
   home.sessionVariables = {
     NEALXOS_THEME = "osaka-jade";

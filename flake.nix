@@ -63,7 +63,7 @@
       homeConfigurations.neal = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         modules = [
-          ./home
+          ./dotfiles
           {
             home.username = "neal";
             home.homeDirectory = "/home/neal";

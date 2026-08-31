@@ -62,7 +62,7 @@
   users.defaultUserShell = pkgs.fish;
 
   home-manager.sharedModules = [
-    ../home
+    ../dotfiles
     ./hypr
     ./noctalia
   ];
