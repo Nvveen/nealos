@@ -132,20 +132,25 @@ source = "community"
 [theme.templates]
 builtin_ids = ["btop", "foot", "gtk3", "gtk4", "hyprland", "qt"]
 community_ids = [
-    "fzf",
+    "bat",
     "discord",
+    "fzf",
     "gimp",
     "hyprtoolkit",
     "inkscape",
     "lazygit",
     "libreoffice",
     "neovim",
+    "papirus-icons",
     "pywalfox-beta4",
     "pywalfox",
     "steam",
     "tmux",
     "vscode",
+    "yazi",
 ]
+enable_builtin_templates = true
+enable_community_templates = true
 
 [wallpaper]
 directory = "/home/neal/.config/themes/osaka-jade/backgrounds"
@@ -155,10 +160,13 @@ enabled = true
 interval_seconds = 3600
 
 [wallpaper.default]
-path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg-2.jpg"
+path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg.jpg"
 
 [wallpaper.last]
-path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg-2.jpg"
+path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg.jpg"
+
+[wallpaper.monitors.Virtual-1]
+path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg.jpg"
 
 [widget.network]
 show_label = false

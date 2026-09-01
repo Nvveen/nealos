@@ -35,6 +35,18 @@
     withUWSM = true;
   };
 
+  xdg.portal = {
+    enable = true;
+    extraPortals = [ pkgs.xdg-desktop-portal-gtk ];
+    config.hyprland = {
+      default = [
+        "hyprland"
+        "gtk"
+      ];
+      "org.freedesktop.impl.portal.Settings" = [ "gtk" ];
+    };
+  };
+
   environment.systemPackages = [
     pkgs.ddcutil
     pkgs.foot
@@ -83,4 +95,19 @@
   };
 
   programs.dconf.enable = true;
+
+  # Thunar needs these as system services: thumbnails and removable-drive
+  # mounting don't work from the package alone.
+  programs.thunar.enable = true;
+  services.tumbler.enable = true;
+  services.gvfs.enable = true;
+
+  # noctalia's papirus-icons template guards on /usr/share/icons before it will
+  # do anything, and that path doesn't exist on NixOS. Provide it so the script
+  # can find the theme and copy it somewhere writable.
+  systemd.tmpfiles.rules = [
+    "d /usr/share/icons 0755 root root -"
+    "L+ /usr/share/icons/Papirus-Dark - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
+    "L+ /usr/share/icons/Papirus - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus"
+  ];
 }

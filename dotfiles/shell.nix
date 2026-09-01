@@ -3,12 +3,8 @@
 
 let
   shellAliases = {
-    l = "ls -alh";
-    ll = "ls -l";
-    ls = "ls --color=tty";
-    grep = "grep --color=auto";
-    egrep = "egrep --color=auto";
-    fgrep = "fgrep --color=auto";
+    vim = "nvim";
+    vi = "nvim";
   };
 in
 {
@@ -22,6 +18,7 @@ in
     ripgrep # grep, fast, gitignore-aware
     sd # sed without the escaping
     tree
+    yazi
   ];
 
   programs.fish = {
@@ -48,6 +45,9 @@ in
       ll = "eza -l --git";
       la = "eza -la --git";
       lt = "eza --tree --level=2";
+      grep = "grep --color=auto";
+      egrep = "egrep --color=auto";
+      fgrep = "fgrep --color=auto";
       cat = "bat";
     };
 

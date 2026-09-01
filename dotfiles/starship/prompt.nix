@@ -25,7 +25,7 @@
     "[](fg:${c.surfaceVariant} bg:${c.surface})"
     "$time"
     "[ ](fg:${c.surface})"
-    "\n$character"
+    " $character"
   ];
 
   directory = {
