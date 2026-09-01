@@ -1,5 +1,6 @@
 {
   inputs,
+  lib,
   palette,
   pkgs,
   nealosSplash,
@@ -7,13 +8,32 @@
 }:
 let
   c = palette.colors;
+
+  usersDir = ../../../users;
+
+  # SDDM reads <user>.face.icon from FacesDir; store paths avoid the perms/homedir problems.
+  avatars = lib.filterAttrs (_: p: builtins.pathExists p) (
+    lib.mapAttrs (name: _: usersDir + "/${name}/files/avatar.png") (
+      lib.filterAttrs (_: type: type == "directory") (builtins.readDir usersDir)
+    )
+  );
+
+  facesDir = pkgs.runCommand "sddm-faces" { } ''
+    mkdir -p $out
+    ${lib.concatStringsSep "\n" (
+      lib.mapAttrsToList (name: p: "cp ${p} $out/${name}.face.icon") avatars
+    )}
+  '';
 in
 {
   imports = [
     inputs.silentSDDM.nixosModules.default
   ];
 
-  services.displayManager.sddm.settings.Theme.CursorTheme = "Bibata-Modern-Classic";
+  services.displayManager.sddm.settings.Theme = {
+    CursorTheme = "Bibata-Modern-Classic";
+    FacesDir = "${facesDir}";
+  };
 
   environment.systemPackages = [ pkgs.bibata-cursors ];
 

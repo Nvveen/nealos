@@ -117,6 +117,7 @@ enabled = ["noctalia/notes"]
 
 [shell]
 app_icon_colorize = true
+avatar_path = "@avatarPath@"
 corner_radius_scale = 0.0
 panel_anchor_bar = "default"
 polkit_agent = true
