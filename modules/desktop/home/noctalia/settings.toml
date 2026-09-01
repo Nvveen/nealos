@@ -3,6 +3,7 @@ capsule = true
 end = [
     "tray",
     "notifications",
+    "widget",
     "notes",
     "clipboard",
     "group:g1",
@@ -113,7 +114,7 @@ show_unlock_hint = true
 show_weather = true
 
 [plugins]
-enabled = ["noctalia/notes"]
+enabled = ["noctalia/notes", "blackbartblues/keymap"]
 
 [shell]
 app_icon_colorize = true
@@ -121,6 +122,7 @@ avatar_path = "@avatarPath@"
 corner_radius_scale = 0.0
 panel_anchor_bar = "default"
 polkit_agent = true
+setup_wizard_enabled = false
 
 [shell.screen_corners]
 size = 1
@@ -169,9 +171,15 @@ path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg.jpg"
 [wallpaper.monitors.Virtual-1]
 path = "/home/neal/.config/themes/osaka-jade/backgrounds/osaka-jade-bg.jpg"
 
+[widget.cpu]
+label_min_width = 40
+
 [widget.network]
 show_label = false
 show_vpn_label = true
 
 [widget.notes]
 type = "noctalia/notes:notes"
+
+[widget.widget]
+type = "blackbartblues/keymap:widget"
