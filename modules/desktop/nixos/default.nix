@@ -53,6 +53,10 @@
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     pkgs.hyprpolkitagent
     pkgs.pywalfox-native
+    # File manager and related packages
+    pkgs.nautilus
+    pkgs.libheif
+    pkgs.libheif.out
   ];
 
   # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
@@ -96,10 +100,7 @@
 
   programs.dconf.enable = true;
 
-  # Thunar needs these as system services: thumbnails and removable-drive
-  # mounting don't work from the package alone.
-  programs.thunar.enable = true;
-  services.tumbler.enable = true;
+  # for file managers
   services.gvfs.enable = true;
 
   # noctalia's papirus-icons template guards on /usr/share/icons before it will
@@ -110,4 +111,6 @@
     "L+ /usr/share/icons/Papirus-Dark - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
     "L+ /usr/share/icons/Papirus - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus"
   ];
+
+  environment.pathsToLink = [ "share/thumbnailers" ];
 }
