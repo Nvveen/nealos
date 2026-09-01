@@ -47,16 +47,17 @@
     };
   };
 
-  environment.systemPackages = [
-    pkgs.ddcutil
-    pkgs.foot
+  environment.systemPackages = with pkgs; [
+    ddcutil
+    foot
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
-    pkgs.hyprpolkitagent
-    pkgs.pywalfox-native
-    # File manager and related packages
-    pkgs.nautilus
-    pkgs.libheif
-    pkgs.libheif.out
+    hyprpolkitagent
+    pywalfox-native
+    kdePackages.dolphin
+    kdePackages.kio
+    kdePackages.kio-extras
+    kdePackages.kio-fuse
+    kdePackages.qtsvg
   ];
 
   # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
@@ -111,6 +112,4 @@
     "L+ /usr/share/icons/Papirus-Dark - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus-Dark"
     "L+ /usr/share/icons/Papirus - - - - ${pkgs.papirus-icon-theme}/share/icons/Papirus"
   ];
-
-  environment.pathsToLink = [ "share/thumbnailers" ];
 }
