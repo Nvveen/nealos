@@ -36,10 +36,10 @@ in
       gp = "git push";
       gpl = "git pull";
 
-      nrs = "sudo nixos-rebuild switch --flake ~/nealxos#nealxos";
-      nrt = "sudo nixos-rebuild test --flake ~/nealxos#nealxos";
-      nfu = "nix flake update --flake ~/nealxos";
-      nos = "nh os switch ~/nealxos";
+      nrs = "sudo nixos-rebuild switch --flake ~/nealos#nealos";
+      nrt = "sudo nixos-rebuild test --flake ~/nealos#nealos";
+      nfu = "nix flake update --flake ~/nealos";
+      nos = "nh os switch ~/nealos";
 
       ls = "eza";
       ll = "eza -l --git";

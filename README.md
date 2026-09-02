@@ -1,4 +1,4 @@
-# nealxos
+# nealos
 
 NixOS configuration for all my machines, plus a portable dotfiles module that
 works on any Linux with home-manager.
@@ -107,7 +107,7 @@ Rebuild a host:
 
 Install dotfiles on a non-NixOS machine:
 
-    nix run home-manager/master -- switch --flake github:<you>/nealxos#<user>
+    nix run home-manager/master -- switch --flake github:<you>/nealos#<user>
 
 Update one input:
 
