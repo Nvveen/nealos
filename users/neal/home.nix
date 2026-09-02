@@ -15,4 +15,12 @@
       email = "nealvanveen@gmail.com";
     };
   };
+
+  programs.ssh = {
+    enable = true;
+    matchBlocks."github.com" = {
+      identityFile = "/run/secrets/ssh/github";
+      identitiesOnly = true;
+    };
+  };
 }

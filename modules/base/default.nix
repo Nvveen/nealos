@@ -1,6 +1,15 @@
-{ pkgs, lib, ... }:
+{
+  pkgs,
+  lib,
+  inputs,
+  ...
+}:
 
 {
+  imports = [
+    inputs.sops-nix.nixosModules.sops
+  ];
+
   boot.initrd.systemd.enable = true;
   boot.loader.timeout = 0;
 
@@ -37,6 +46,7 @@
     nixd
     nixfmt
     ripgrep
+    sops
     wget
   ];
 
@@ -68,6 +78,18 @@
     clean = {
       enable = true;
       extraArgs = "--keep-since 30d --keep 5";
+    };
+  };
+
+  sops.defaultSopsFile = ../../secrets/common.yaml;
+
+  sops.secrets = {
+    test = {
+      owner = "neal";
+    };
+    "ssh/github" = {
+      owner = "neal";
+      mode = "0600";
     };
   };
 }
