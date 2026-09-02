@@ -3,8 +3,15 @@
 { pkgs, ... }:
 
 {
-  boot.loader.systemd-boot.enable = true;
+  boot.loader.limine.enable = true;
+  # The 1G ESP fills up quickly once each generation ships a kernel and initrd.
+  boot.loader.limine.maxGenerations = 20;
   boot.loader.efi.canTouchEfiVariables = true;
+
+  nealos.disk = {
+    device = "/dev/sda";
+    encrypt = false;
+  };
 
   boot.initrd.kernelModules = [ "hyperv_drm" ];
 
