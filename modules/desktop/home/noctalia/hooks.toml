@@ -1,2 +1,2 @@
 [hooks]
-colors_changed = ["hyprctl reload"]
+colors_changed = ["hyprctl reload", "thunar -q"]

@@ -1,4 +1,4 @@
 return {
     terminal = "foot",
-    fileManager = "dolphin"
+    fileManager = "thunar"
 }

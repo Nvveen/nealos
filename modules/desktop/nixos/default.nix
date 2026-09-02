@@ -53,11 +53,9 @@
     inputs.noctalia.packages.${pkgs.stdenv.hostPlatform.system}.default
     hyprpolkitagent
     pywalfox-native
-    kdePackages.dolphin
-    kdePackages.kio
-    kdePackages.kio-extras
-    kdePackages.kio-fuse
-    kdePackages.qtsvg
+    thunar
+    tumbler
+    imv
   ];
 
   # Only helps locally rendered terminals; SSH/VS Code clients need the font installed themselves.
