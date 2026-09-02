@@ -33,16 +33,21 @@
 
   outputs =
     {
+      self,
       nixpkgs,
       home-manager,
-      vscode-server,
-      nix-cachyos-kernel,
       ...
     }@inputs:
     let
       palette = import ./lib/palette.nix {
         inherit inputs;
         inherit (nixpkgs) lib;
+      };
+
+      homeManagerDefaults = {
+        home-manager.useGlobalPkgs = true;
+        home-manager.useUserPackages = true;
+        home-manager.extraSpecialArgs = { inherit inputs palette; };
       };
     in
     {
@@ -51,26 +56,24 @@
         specialArgs = { inherit inputs palette; };
         modules = [
           ./hosts/hyperv
-          vscode-server.nixosModules.default
           home-manager.nixosModules.home-manager
-          {
-            home-manager.useGlobalPkgs = true;
-            home-manager.useUserPackages = true;
-            home-manager.extraSpecialArgs = { inherit inputs palette; };
-          }
-          {
-            nixpkgs.overlays = [ nix-cachyos-kernel.overlays.pinned ];
-            nix.settings.substituters = [
-              "https://attic.xuyh0120.win/lantian"
-              "https://noctalia.cachix.org"
-            ];
-            nix.settings.trusted-public-keys = [
-              "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-              "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-            ];
-          }
+          homeManagerDefaults
         ];
       };
+
+      # Live installer image. Deliberately imports only ./modules/common: no
+      # bootloader, no disko, no sops.
+      nixosConfigurations.installer = nixpkgs.lib.nixosSystem {
+        system = "x86_64-linux";
+        specialArgs = { inherit inputs palette; };
+        modules = [
+          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
+          ./hosts/installer
+          home-manager.nixosModules.home-manager
+          homeManagerDefaults
+        ];
+      };
+
       homeConfigurations.neal = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
         extraSpecialArgs = { inherit inputs palette; };
@@ -78,5 +81,7 @@
           ./users/neal/home.nix
         ];
       };
+
+      packages.x86_64-linux.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
     };
 }

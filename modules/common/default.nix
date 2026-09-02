@@ -1,3 +1,6 @@
+# Settings that make sense on any target, including a live ISO: no bootloader,
+# no filesystems, no disko, no sops.
+
 {
   pkgs,
   lib,
@@ -6,17 +9,24 @@
 }:
 
 {
-  imports = [
-    inputs.sops-nix.nixosModules.sops
-  ];
-
   boot.initrd.systemd.enable = true;
-  boot.loader.timeout = 0;
 
   nix.settings.experimental-features = [
     "nix-command"
     "flakes"
   ];
+
+  nix.settings.substituters = [
+    "https://attic.xuyh0120.win/lantian"
+    "https://noctalia.cachix.org"
+  ];
+
+  nix.settings.trusted-public-keys = [
+    "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
+    "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
+  ];
+
+  nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
 
   nixpkgs.config.allowUnfree = true;
 
@@ -47,6 +57,7 @@
     nixfmt
     ripgrep
     sops
+    ssh-to-age
     wget
   ];
 
@@ -62,34 +73,21 @@
   # Lets unpatched dynamically linked binaries run (VS Code servers, language servers, ...)
   programs.nix-ld.enable = true;
 
+  # mkDefault so the installer ISO can restore stock password login.
   services.openssh = {
     enable = true;
     settings = {
-      PasswordAuthentication = false;
-      KbdInteractiveAuthentication = false;
-      PermitRootLogin = "no";
+      PasswordAuthentication = lib.mkDefault false;
+      KbdInteractiveAuthentication = lib.mkDefault false;
+      PermitRootLogin = lib.mkDefault "no";
     };
   };
-
-  services.vscode-server.enable = true;
 
   programs.nh = {
     enable = true;
     clean = {
       enable = true;
       extraArgs = "--keep-since 30d --keep 5";
-    };
-  };
-
-  sops.defaultSopsFile = ../../secrets/common.yaml;
-
-  sops.secrets = {
-    test = {
-      owner = "neal";
-    };
-    "ssh/github" = {
-      owner = "neal";
-      mode = "0600";
     };
   };
 }

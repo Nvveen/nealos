@@ -7,6 +7,7 @@
   # The 1G ESP fills up quickly once each generation ships a kernel and initrd.
   boot.loader.limine.maxGenerations = 20;
   boot.loader.efi.canTouchEfiVariables = true;
+  boot.loader.timeout = 0;
 
   nealos.disk = {
     device = "/dev/sda";
@@ -25,4 +26,6 @@
   system.stateVersion = "26.05";
 
   home-manager.sharedModules = [ ./hypr/hyprland.nix ];
+
+  virtualisation.hypervGuest.enable = true;
 }
