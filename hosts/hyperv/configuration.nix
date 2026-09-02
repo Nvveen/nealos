@@ -12,7 +12,7 @@
 
   boot.kernelPackages = pkgs.cachyosKernels.linuxPackages-cachyos-latest;
 
-  networking.hostName = "nealos";
+  networking.hostName = "nealos-hyperv";
 
   # Release this machine was first installed with; do not bump on upgrade.
   system.stateVersion = "26.05";
