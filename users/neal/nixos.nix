@@ -2,6 +2,7 @@
 
 {
   users.users."neal" = {
+    initialPassword = "changeme"; # Change this to use sops
     isNormalUser = true;
     description = "Neal van Veen";
     extraGroups = [
