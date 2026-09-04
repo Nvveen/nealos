@@ -1,7 +1,7 @@
-# Graphical environment. Self-contained enough to be imported by a live ISO.
-
-{ ... }:
+{ pkgs, ... }:
 
 {
   imports = [ ./nixos ];
+
+  environment.systemPackages = [ pkgs.bibata-cursors ];
 }

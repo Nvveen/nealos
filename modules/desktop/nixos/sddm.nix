@@ -30,12 +30,22 @@ in
     inputs.silentSDDM.nixosModules.default
   ];
 
-  services.displayManager.sddm.settings.Theme = {
-    CursorTheme = "Bibata-Modern-Classic";
-    FacesDir = "${facesDir}";
+  services.displayManager.sddm = {
+    settings = {
+      Theme = {
+        CursorTheme = "Bibata-Modern-Classic";
+        CursorSize = 24;
+        FacesDir = "${facesDir}";
+      };
+      # General.GreeterEnvironment = lib.mkForce "XCURSOR_THEME=Bibata-Modern-Classic,XCURSOR_SIZE=24";
+    };
+    extraPackages = [ pkgs.bibata-cursors ];
+    wayland = {
+      enable = true;
+      # default weston, but doesn't allow for cursor.
+      compositor = "kwin";
+    };
   };
-
-  environment.systemPackages = [ pkgs.bibata-cursors ];
 
   programs.silentSDDM = {
     enable = true;
