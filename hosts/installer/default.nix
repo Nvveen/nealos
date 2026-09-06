@@ -1,7 +1,6 @@
 { ... }:
 {
   imports = [
-    ../../modules/common
     (
       { pkgs, lib, ... }:
       {

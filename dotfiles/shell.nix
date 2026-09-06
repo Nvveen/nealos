@@ -35,9 +35,10 @@ in
       gl = "git log --oneline --graph --decorate";
       gp = "git push";
       gpl = "git pull";
+      gf = "git fetch";
 
-      nrs = "sudo nixos-rebuild switch --flake ~/nealos#nealos";
-      nrt = "sudo nixos-rebuild test --flake ~/nealos#nealos";
+      nrs = "sudo nixos-rebuild switch --flake ~/nealos#hyperv";
+      nrt = "sudo nixos-rebuild test --flake ~/nealos#hyperv";
       nfu = "nix flake update --flake ~/nealos";
       nos = "nh os switch ~/nealos";
 

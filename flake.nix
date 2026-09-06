@@ -44,20 +44,40 @@
         inherit (nixpkgs) lib;
       };
 
-      homeManagerDefaults = {
+      homeManagerDefaults = hostInputs: {
         home-manager.useGlobalPkgs = true;
         home-manager.useUserPackages = true;
-        home-manager.extraSpecialArgs = { inherit inputs palette; };
+        home-manager.extraSpecialArgs = {
+          inputs = hostInputs;
+          inherit palette;
+        };
+      };
+
+      commonInputs = {
+        inherit (inputs)
+          community-palettes
+          disko
+          lazyvim
+          nix-cachyos-kernel
+          noctalia
+          silentSDDM
+          sops-nix
+          ;
       };
     in
     {
-      nixosConfigurations.nealos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.hyperv = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs palette; };
+        specialArgs = {
+          inputs = commonInputs // {
+            inherit (inputs) vscode-server;
+          };
+          inherit palette;
+        };
         modules = [
           ./hosts/hyperv
           home-manager.nixosModules.home-manager
-          homeManagerDefaults
+          (homeManagerDefaults (commonInputs // { inherit (inputs) vscode-server; }))
         ];
       };
 
@@ -65,18 +85,27 @@
       # bootloader, no disko, no sops.
       nixosConfigurations.installer = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
-        specialArgs = { inherit inputs palette; };
         modules = [
           "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
           ./hosts/installer
           home-manager.nixosModules.home-manager
-          homeManagerDefaults
+          (homeManagerDefaults {
+          })
         ];
       };
 
       homeConfigurations.neal = home-manager.lib.homeManagerConfiguration {
         pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = { inherit inputs palette; };
+        extraSpecialArgs = {
+          inputs = {
+            inherit (inputs)
+              community-palettes
+              lazyvim
+              noctalia
+              ;
+          };
+          inherit palette;
+        };
         modules = [
           ./users/neal/home.nix
         ];
