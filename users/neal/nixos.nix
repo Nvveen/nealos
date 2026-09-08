@@ -10,9 +10,7 @@
       "wheel"
     ];
     # packages = with pkgs; [ ];
-    openssh.authorizedKeys.keys = [
-      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIGC8kNuZ6WSdY6yo6SYE/jdKrXUiG/X/14tfs26OGkbq"
-    ];
+    openssh.authorizedKeys.keyFiles = [ /etc/ssh/ssh_host_ed25519_key.pub ];
   };
 
   sops.secrets = {
