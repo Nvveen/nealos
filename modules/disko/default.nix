@@ -5,6 +5,9 @@ let
 
   luksName = "nealos";
 
+  rootDevice =
+    if cfg.encrypt then "/dev/mapper/${luksName}" else "/dev/disk/by-partlabel/disk-main-root";
+
   opts = [
     "compress=zstd:1"
     "noatime"
@@ -112,6 +115,10 @@ in
         assertion = cfg.tpm -> cfg.encrypt;
         message = "nealos.disk.tpm requires nealos.disk.encrypt: TPM unlock only applies to a LUKS container.";
       }
+      {
+        assertion = cfg.tpm -> config.boot.initrd.systemd.enable;
+        message = "nealos.disk.tpm requires boot.initrd.systemd.enable: crypttabExtraOpts is ignored by the scripted initrd.";
+      }
     ];
 
     disko.devices.disk.main = {
@@ -154,8 +161,7 @@ in
       "/var/log".neededForBoot = true;
 
       ${topLevel} = {
-        device =
-          if cfg.encrypt then "/dev/mapper/${luksName}" else "/dev/disk/by-partlabel/disk-main-root";
+        device = rootDevice;
         fsType = "btrfs";
         options = [
           "subvolid=5"
@@ -179,14 +185,16 @@ in
     # Hibernation additionally needs boot.kernelParams = [ "resume_offset=<N>" ], where N
     # comes from `btrfs inspect-internal map-swapfile -r /swap/swapfile` after install.
     # Without it, hibernation silently fails to resume.
-    boot.resumeDevice = lib.mkIf cfg.hibernate (
-      if cfg.encrypt then "/dev/mapper/${luksName}" else "/dev/disk/by-partlabel/disk-main-root"
-    );
+    boot.resumeDevice = lib.mkIf cfg.hibernate rootDevice;
 
     # Not sufficient on its own: enroll the TPM keyslot once per machine after install with
     # `systemd-cryptenroll --tpm2-device=auto --tpm2-pcrs=0+2+7 <luks-partition>`.
     # The passphrase keyslot remains as fallback.
-    boot.initrd.luks.devices.${luksName}.crypttabExtraOpts = lib.mkIf cfg.tpm [ "tpm2-device=auto" ];
+    # mkIf must sit on the devices set, not the leaf: a leaf-level mkIf still instantiates
+    # the ${luksName} submodule, which lacks a `device` when encrypt = false.
+    boot.initrd.luks.devices = lib.mkIf cfg.tpm {
+      ${luksName}.crypttabExtraOpts = [ "tpm2-device=auto" ];
+    };
 
     # Only /home is snapshotted: the rest is rebuilt from the flake, and rolling
     # back to an older generation is the bootloader's job.
