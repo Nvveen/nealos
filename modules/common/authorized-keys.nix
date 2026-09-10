@@ -1,6 +1,11 @@
+# Scans users/<name>/keys/*.pub for every user directory and wires them up as
+# authorized_keys. Lives here (not under users/) because it applies across all
+# users, not to one. Imported once by modules/common so every host gets it.
 { lib, ... }:
 let
-  usersDir = ./.;
+  # Moved from users/authorized_keys.nix: was usersDir = ./.; there, since the
+  # file lived inside users/. Now two levels up from modules/common.
+  usersDir = ../../users;
 
   # users/<user>/keys/*.pub
   keyFilesFor =

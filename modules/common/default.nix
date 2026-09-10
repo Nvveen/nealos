@@ -9,6 +9,10 @@
 }:
 
 {
+  # Previously only in users/authorized_keys.nix, which nothing imported —
+  # new hosts got no authorized_keys.d/<user> file at all.
+  imports = [ ./authorized-keys.nix ];
+
   boot.initrd.systemd.enable = true;
 
   nix.settings.experimental-features = [

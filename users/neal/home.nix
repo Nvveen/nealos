@@ -25,7 +25,7 @@
     enable = true;
     enableDefaultConfig = false;
     settings."github.com" = {
-      IdentityFile = "/run/secrets/ssh/github";
+      IdentityFile = "/run/secrets/users/neal/id_ed25519";
       IdentitiesOnly = true;
     };
   };

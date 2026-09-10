@@ -26,8 +26,9 @@ ever reference **paths**, never values — nothing plaintext touches `/nix/store
 .sops.yaml                    # recipient list + creation rules
 secrets/common.yaml           # encrypted secrets (committed)
 seed/etc/ssh/                 # host keys for machines not yet installed — GITIGNORED
-users/
+modules/common/
   authorized-keys.nix         # scans the dirs below
+users/
   neal/
     keys/
       desktop.pub             # public keys, plaintext, committed
@@ -99,7 +100,7 @@ resolves either way.
 ## User SSH keys
 
 Each machine has its own keypair per user. Public halves are committed as plain files under
-`users/<user>/keys/` and picked up by directory scan in `users/authorized-keys.nix` —
+`users/<user>/keys/` and picked up by directory scan in `modules/common/authorized-keys.nix` —
 adding a machine means dropping a `.pub` in and rebuilding, with no `.nix` file
 touched. `keyFiles` merges with `keys`, so a literal string can still be added for
 anything that shouldn't live in the tree (CI deploy key, resident Yubikey key).

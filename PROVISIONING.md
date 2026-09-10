@@ -95,7 +95,38 @@ Put it in `hosts/<host>/`:
 nealos.disk.device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_S6...";
 ```
 
-**2. Partition, format, mount** — disko reads the layout from your flake:
+The easiest install path is the one-shot `disko-install` flow, which does the
+layout + install in one go. It is a drop-in replacement for the manual `disko` and
+`nixos-install` steps below, so keep the existing fallback instructions around for
+cases where you want more control. The key part is the `--seed` flag: this is the
+correct way to preseed the SSH host key when the disk is being formatted and installed
+in the same pass, instead of trying to copy files into `/mnt` afterwards.
+
+**2. Preferred: partition, format, and install with `disko-install`**
+
+```bash
+lsblk
+sudo nix run github:nix-community/disko/latest#disko-install -- \
+  --flake .#<host> \
+  --disk <disk-name> /dev/disk/by-id/<target-disk> \
+  --seed ./seed
+```
+
+Use `lsblk` to confirm the disk name you want to target before the install starts. This
+is the shorter path for a host whose flake already contains the disko layout. It handles
+the format/mount step and then runs the install under the hood, and it preseeds the host
+key before activation so you do not have to manually move the key into `/mnt/etc/ssh`
+after the fact. If you use this path, you can skip the explicit `disko` and
+`nixos-install` commands in the manual steps below.
+
+After the install finishes, generate the hardware config from the new system root and add it to the repo:
+
+```bash
+sudo nixos-generate-config --no-filesystems --root /mnt
+```
+
+**3. Manual fallback: partition, format, mount** — disko reads the layout from your
+flake:
 
 ```bash
 sudo nix run github:nix-community/disko -- \
@@ -106,7 +137,7 @@ Destructive, no confirmation. With `encrypt = true` this prompts for the LUKS
 passphrase — you set it here, and it's the fallback even after TPM enrolment. Check
 `lsblk -f` afterwards; everything should be under `/mnt`.
 
-**3. Generate the hardware config**
+**4. Generate the hardware config**
 
 ```bash
 sudo nixos-generate-config --no-filesystems --root /mnt
@@ -128,7 +159,7 @@ a self-built desktop — import it too.
 
 Still in the ISO, with `seed/` carried over on a USB stick and the repo up to date.
 
-**1. Seed the host key:**
+**1. Seed the host key (still required before any install path):**
 
 ```bash
 sudo install -d -m 0755 /mnt/etc/ssh
@@ -136,7 +167,25 @@ sudo install -m 0600 ~/nealos/seed/etc/ssh/ssh_host_ed25519_key     /mnt/etc/ssh
 sudo install -m 0644 ~/nealos/seed/etc/ssh/ssh_host_ed25519_key.pub /mnt/etc/ssh/
 ```
 
-**2. Install:**
+This is the same sensitive step whether you use the one-shot `disko-install` flow or the
+manual `disko` + `nixos-install` flow below. The key must exist before the first build
+that tries to decrypt secrets.
+
+**2. Preferred: install in one step with `disko-install`:**
+
+```bash
+cd ~/nealos
+sudo nix run github:nix-community/disko/latest#disko-install -- \
+  --flake .#<host> \
+  --disk <disk-name> /dev/disk/by-id/<target-disk> \
+  --seed ./seed
+```
+
+This is the easier path and is equivalent to doing the manual `disko` + `nixos-install`
+steps below in one command, but it preserves the preseeded SSH host key from the start.
+If you prefer the more explicit route, keep using the commands in the next step instead.
+
+**3. Manual fallback: install with `nixos-install`:**
 
 ```bash
 cd ~/nealos

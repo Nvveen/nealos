@@ -13,13 +13,15 @@
   };
 
   sops.secrets = {
-    "ssh/github" = {
+    "users/neal/password" = {
+      sopsFile = ./secrets/keys.yaml;
+      neededForUsers = true;
+    };
+    "users/neal/id_ed25519" = {
+      sopsFile = ./secrets/keys.yaml;
       owner = "neal";
       mode = "0600";
     };
-    "users/neal/password".neededForUsers = true;
-    # No `path` into $HOME: sops runs as root and would create ~/.config as
-    # root:root, locking home-manager out. home.nix symlinks it instead.
     "sops_init/age/keys_txt" = {
       owner = "neal";
       mode = "0600";
