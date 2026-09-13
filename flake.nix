@@ -81,8 +81,9 @@
         ];
       };
 
-      # Live installer image. Deliberately imports only ./modules/common: no
-      # bootloader, no disko, no sops.
+      # Live installer image. Does NOT import ./modules/common (it needs the
+      # `inputs` specialArg); shared nix settings come via
+      # modules/common/nix-settings.nix inside ./hosts/installer.
       nixosConfigurations.installer = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
         modules = [

@@ -11,24 +11,12 @@
 {
   # Previously only in users/authorized_keys.nix, which nothing imported —
   # new hosts got no authorized_keys.d/<user> file at all.
-  imports = [ ./authorized-keys.nix ];
+  imports = [
+    ./authorized-keys.nix
+    ./nix-settings.nix # caches + experimental-features, shared with the installer ISO
+  ];
 
   boot.initrd.systemd.enable = true;
-
-  nix.settings.experimental-features = [
-    "nix-command"
-    "flakes"
-  ];
-
-  nix.settings.substituters = [
-    "https://attic.xuyh0120.win/lantian"
-    "https://noctalia.cachix.org"
-  ];
-
-  nix.settings.trusted-public-keys = [
-    "lantian:EeAUQ+W+6r7EtwnmYjeVwx5kOGEBpjlBfPlzGlTNvHc="
-    "noctalia.cachix.org-1:pCOR47nnMEo5thcxNDtzWpOxNFQsBRglJzxWPp3dkU4="
-  ];
 
   nixpkgs.overlays = [ inputs.nix-cachyos-kernel.overlays.pinned ];
 
