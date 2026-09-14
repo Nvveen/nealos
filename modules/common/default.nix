@@ -58,7 +58,7 @@
   users.defaultUserShell = pkgs.fish;
 
   home-manager.sharedModules = [
-    ../../dotfiles
+    ./home/shell
   ];
   home-manager.backupFileExtension = "bak";
 

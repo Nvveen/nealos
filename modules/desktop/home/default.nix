@@ -7,8 +7,6 @@ in
     ./hypr
     ./noctalia
     ./theming
-    ./starship.nix
-    ./bitwarden.nix
   ];
 
   home.file.".face.icon" = lib.mkIf (builtins.pathExists avatar) { source = avatar; };

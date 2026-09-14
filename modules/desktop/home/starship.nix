@@ -14,7 +14,8 @@ let
   cfgPath = "${config.home.homeDirectory}/.local/share/starship/starship.toml";
 
   template = (pkgs.formats.toml { }).generate "starship.toml.tpl" (
-    import ../../../dotfiles/starship/prompt.nix {
+    import ../../common/home/shell/starship/prompt.nix {
+      # changed: prompt shape now lives in common
       inherit lib;
       c = {
         primary = "{{colors.primary.default.hex}}";
@@ -31,8 +32,9 @@ let
   );
 in
 {
-  # dotfiles/starship writes a complete config for the portable case; here
-  # noctalia owns the file, so home-manager must not also manage it.
+  # modules/common/home/starship sets these from the build-time palette for the
+  # non-noctalia case; here noctalia owns the file, so home-manager must not
+  # also manage it.
   programs.starship.settings = lib.mkForce { };
 
   home.sessionVariables.STARSHIP_CONFIG = lib.mkForce cfgPath;

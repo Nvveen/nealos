@@ -8,6 +8,7 @@ let
   };
 in
 {
+  imports = [ ./starship ];
   home.packages = with pkgs; [
     bat # cat with syntax highlighting
     delta # diff viewer, used by lazygit
@@ -36,11 +37,6 @@ in
       gp = "git push";
       gpl = "git pull";
       gf = "git fetch";
-
-      nrs = "sudo nixos-rebuild switch --flake ~/nealos#hyperv";
-      nrt = "sudo nixos-rebuild test --flake ~/nealos#hyperv";
-      nfu = "nix flake update --flake ~/nealos";
-      nos = "nh os switch ~/nealos";
 
       ls = "eza";
       ll = "eza -l --git";

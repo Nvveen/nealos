@@ -1,11 +1,9 @@
-# The prompt's shape and layout, shared by both starship modules.
+# The prompt's shape and layout, shared by Starship configs.
 #
-# Colours are interpolated directly rather than going through starship's
-# palette feature: as of starship 1.26.0, palette names resolve in module
+# Colours are interpolated directly rather than going through Starship's
+# palette feature: as of Starship 1.26.0, palette names resolve in module
 # configs but NOT in the root `format` string, and this prompt's segments live
-# almost entirely in `format`. Callers pass `c` as an attrset of colour
-# strings — literal hex for the portable module, noctalia {{...}} placeholders
-# for the desktop one.
+# almost entirely in `format`.
 { lib, c }:
 {
   # Segments run bright to dark, left to right.

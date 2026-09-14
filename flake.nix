@@ -105,7 +105,8 @@
           inherit palette;
         };
         modules = [
-          ./users/neal/home.nix
+          ./users/neal/user.nix
+          ./users/neal/dotfiles
         ];
       };
 
