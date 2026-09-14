@@ -95,14 +95,41 @@ Put it in `hosts/<host>/`:
 nealos.disk.device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_S6...";
 ```
 
-The easiest install path is the one-shot `disko-install` flow, which does the
-layout + install in one go. It is a drop-in replacement for the manual `disko` and
-`nixos-install` steps below, so keep the existing fallback instructions around for
-cases where you want more control. The key part is using `--extra-files` to copy the
-pre-generated SSH host key directory into the target `/etc/ssh` before activation,
-instead of trying to copy files into `/mnt` afterwards.
+The install path is a choice, not a phase split: the only thing that changes is how the
+system is installed. The automatic local and remote paths do not need a pre-seed step
+in the prose; they can inject the SSH host key as part of the install. The manual path
+is where the key is explicitly created in the target root before the first activation.
 
-**2. Preferred: partition, format, and install with `disko-install`**
+**1. Generate the hardware config from the installer when the host is created**
+
+For every install path — automatic local, automatic remote, or manual — generate the
+hardware config from the installer as soon as the new host is installed, then commit the
+result to the repo as part of creating that host definition:
+
+```bash
+sudo nixos-generate-config --no-filesystems --root /mnt
+```
+
+This is not a later cleanup step; it belongs to the host-creation flow. `--no-filesystems`
+is not optional. Disko owns every `fileSystems` entry; letting `nixos-generate-config`
+also emit them gives you a conflict, or worse a silently wrong `fsType`. What's left is
+the part that's genuinely per-machine: `boot.initrd.availableKernelModules`,
+`hardware.cpu.*.updateMicrocode`, and similar.
+
+Copy `/mnt/etc/nixos/hardware-configuration.nix` into `hosts/<host>/` and commit it with
+that host's initial config. If `nixos-hardware` has a profile for this machine — likely
+for a laptop, unlikely for a self-built desktop — import it too.
+
+---
+
+## Phase 3 — Install the host
+
+Choose exactly one install path below.
+
+### Automatic local (`disko-install`)
+
+This is the shortest route when the hardware is already booted in the installer and the
+host flake is ready. It formats/mounts the disk and installs the system in one step.
 
 ```bash
 lsblk
@@ -112,21 +139,34 @@ sudo nix run github:nix-community/disko/latest#disko-install -- \
   --extra-files ./seed/etc/ssh /etc/ssh
 ```
 
-Use `lsblk` to confirm the disk name you want to target before the install starts. This
-is the shorter path for a host whose flake already contains the disko layout. It handles
-the format/mount step and then runs the install under the hood, and it preloads the host
-key before activation so you do not have to manually move the key into `/mnt/etc/ssh`
-after the fact. If you use this path, you can skip the explicit `disko` and
-`nixos-install` commands in the manual steps below.
+Use `lsblk` to confirm the disk name you want to target before the install starts. The
+`--extra-files` flag copies the pre-generated SSH host key into `/etc/ssh` before the
+first activation, so the system can decrypt secrets as soon as it boots.
 
-After the install finishes, generate the hardware config from the new system root and add it to the repo:
+### Automatic remote (`nixos-anywhere`)
+
+This is the remote equivalent for installing onto a machine that is reachable over SSH.
+It is useful when the target is already booted into an installer, but you want to drive
+it from another machine.
 
 ```bash
-sudo nixos-generate-config --no-filesystems --root /mnt
+sudo nix run github:nix-community/nixos-anywhere -- \
+  --flake .#<host> \
+  --target-host root@<target-host> \
+  --extra-files ./seed
 ```
 
-**3. Manual fallback: partition, format, mount** — disko reads the layout from your
-flake:
+`--extra-files ./seed` copies the seed tree to the root of the new installation; for this
+repo that means the generated SSH host key lands under `/etc/ssh/` before activation.
+If the target needs a custom SSH port or key path, pass those through with the matching
+`nixos-anywhere` flags.
+
+### Manual (`disko` + `nixos-install`)
+
+Use this when you want the exact steps visible and controlled. This is the path where
+the host key is actually preseeded into the new root before the first activation.
+
+**1. Prepare the disk with disko**
 
 ```bash
 sudo nix run github:nix-community/disko -- \
@@ -137,29 +177,7 @@ Destructive, no confirmation. With `encrypt = true` this prompts for the LUKS
 passphrase — you set it here, and it's the fallback even after TPM enrolment. Check
 `lsblk -f` afterwards; everything should be under `/mnt`.
 
-**4. Generate the hardware config**
-
-```bash
-sudo nixos-generate-config --no-filesystems --root /mnt
-```
-
-`--no-filesystems` is not optional. Disko owns every `fileSystems` entry; letting
-`nixos-generate-config` also emit them gives you a conflict, or worse a silently wrong
-`fsType`. What's left is the part that's genuinely per-machine:
-`boot.initrd.availableKernelModules`, `hardware.cpu.*.updateMicrocode`, and similar.
-
-Copy `/mnt/etc/nixos/hardware-configuration.nix` into `hosts/<host>/`, commit, push.
-
-If `nixos-hardware` has a profile for this machine — likely for a laptop, unlikely for
-a self-built desktop — import it too.
-
----
-
-## Phase 3 — Install
-
-Still in the ISO, with `seed/` carried over on a USB stick and the repo up to date.
-
-**1. Seed the host key (still required before any install path):**
+**2. Seed the host key into the new root**
 
 ```bash
 sudo install -d -m 0755 /mnt/etc/ssh
@@ -167,25 +185,11 @@ sudo install -m 0600 ~/nealos/seed/etc/ssh/ssh_host_ed25519_key     /mnt/etc/ssh
 sudo install -m 0644 ~/nealos/seed/etc/ssh/ssh_host_ed25519_key.pub /mnt/etc/ssh/
 ```
 
-This is the same sensitive step whether you use the one-shot `disko-install` flow or the
-manual `disko` + `nixos-install` flow below. The key must exist before the first build
-that tries to decrypt secrets.
+This has to happen after the filesystem exists, but before the first build that tries
+to decrypt secrets. The system is not there yet during the earlier phases, so this is a
+manual install concern, not a general pre-install step.
 
-**2. Preferred: install in one step with `disko-install`:**
-
-```bash
-cd ~/nealos
-sudo nix run github:nix-community/disko/latest#disko-install -- \
-  --flake .#<host> \
-  --disk <disk-name> /dev/disk/by-id/<target-disk> \
-  --extra-files ./seed/etc/ssh /etc/ssh
-```
-
-This is the easier path and is equivalent to doing the manual `disko` + `nixos-install`
-steps below in one command, but it preserves the preseeded SSH host key from the start.
-If you prefer the more explicit route, keep using the commands in the next step instead.
-
-**3. Manual fallback: install with `nixos-install`:**
+**3. Install the system**
 
 ```bash
 cd ~/nealos
