@@ -81,13 +81,10 @@
         ];
       };
 
-      # Live installer image. Does NOT import ./modules/common (it needs the
-      # `inputs` specialArg); shared nix settings come via
-      # modules/common/nix-settings.nix inside ./hosts/installer.
       nixosConfigurations.installer = nixpkgs.lib.nixosSystem {
         system = "x86_64-linux";
+        specialArgs = { inherit nixpkgs; };
         modules = [
-          "${nixpkgs}/nixos/modules/installer/cd-dvd/installation-cd-minimal.nix"
           ./hosts/installer
           home-manager.nixosModules.home-manager
           (homeManagerDefaults {
