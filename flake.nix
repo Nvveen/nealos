@@ -29,6 +29,10 @@
       url = "github:nix-community/disko";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+    lanzaboote = {
+      url = "github:nix-community/lanzaboote/v0.4.2";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
   };
 
   outputs =
@@ -64,21 +68,37 @@
           sops-nix
           ;
       };
+
+      mkHost =
+        {
+          hostName,
+          extraInputs ? { },
+        }:
+        let
+          hostInputs = commonInputs // extraInputs;
+        in
+        nixpkgs.lib.nixosSystem {
+          system = "x86_64-linux";
+          specialArgs = {
+            inputs = hostInputs;
+            inherit palette;
+          };
+          modules = [
+            ./hosts/${hostName}
+            home-manager.nixosModules.home-manager
+            (homeManagerDefaults hostInputs)
+          ];
+        };
     in
     {
-      nixosConfigurations.hyperv = nixpkgs.lib.nixosSystem {
-        system = "x86_64-linux";
-        specialArgs = {
-          inputs = commonInputs // {
-            inherit (inputs) vscode-server;
-          };
-          inherit palette;
-        };
-        modules = [
-          ./hosts/hyperv
-          home-manager.nixosModules.home-manager
-          (homeManagerDefaults (commonInputs // { inherit (inputs) vscode-server; }))
-        ];
+      nixosConfigurations.hyperv = mkHost {
+        hostName = "hyperv";
+        extraInputs = { inherit (inputs) vscode-server; };
+      };
+
+      nixosConfigurations.nealdesk = mkHost {
+        hostName = "nealdesk";
+        extraInputs = { inherit (inputs) vscode-server; };
       };
 
       nixosConfigurations.installer = nixpkgs.lib.nixosSystem {

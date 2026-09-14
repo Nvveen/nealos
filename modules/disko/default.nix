@@ -1,4 +1,9 @@
-{ config, lib, ... }:
+{
+  config,
+  lib,
+  inputs,
+  ...
+}:
 
 let
   cfg = config.nealos.disk;
@@ -76,6 +81,9 @@ let
   };
 in
 {
+  imports = [
+    inputs.disko.nixosModules.disko
+  ];
   options.nealos.disk = {
     device = lib.mkOption {
       type = lib.types.str;
@@ -107,6 +115,18 @@ in
       default = false;
       description = "Unlock the LUKS container with the TPM at boot; requires encrypt.";
     };
+
+    espSize = lib.mkOption {
+      type = lib.types.str;
+      default = "1G";
+      description = "Size of the EFI System Partition. Format-time only. Use 2G or more for Secure Boot hosts, where each generation is a full UKI.";
+    };
+
+    passwordFile = lib.mkOption {
+      type = lib.types.nullOr lib.types.str;
+      default = null;
+      description = "Path on the *installer* to a file holding the LUKS passphrase. null means disko prompts interactively. Only read during initial formatting.";
+    };
   };
 
   config = {
@@ -119,6 +139,10 @@ in
         assertion = cfg.tpm -> config.boot.initrd.systemd.enable;
         message = "nealos.disk.tpm requires boot.initrd.systemd.enable: crypttabExtraOpts is ignored by the scripted initrd.";
       }
+      {
+        assertion = cfg.passwordFile != null -> cfg.encrypt;
+        message = "nealos.disk.passwordFile requires nealos.disk.encrypt: there is no LUKS container to unlock.";
+      }
     ];
 
     disko.devices.disk.main = {
@@ -129,7 +153,7 @@ in
         partitions = {
           ESP = {
             priority = 1;
-            size = "1G";
+            size = cfg.espSize;
             type = "EF00";
             content = {
               type = "filesystem";
@@ -149,6 +173,9 @@ in
                   name = luksName;
                   settings.allowDiscards = true;
                   content = btrfs;
+                }
+                // lib.optionalAttrs (cfg.passwordFile != null) {
+                  inherit (cfg) passwordFile;
                 }
               else
                 btrfs;
