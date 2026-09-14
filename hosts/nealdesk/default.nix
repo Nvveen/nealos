@@ -24,8 +24,10 @@
 
   boot.initrd.systemd.enable = true;
 
-  boot.loader.systemd-boot.enable = true; # initial pre-enroll boot step
+  boot.loader.systemd-boot.enable = true; # initial pre-enroll ba7l3qroot step
   boot.loader.efi.canTouchEfiVariables = true;
 
   environment.systemPackages = [ pkgs.sbctl ];
+
+  home-manager.sharedModules = [ ./hypr/hyprland.nix ];
 }
