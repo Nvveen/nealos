@@ -1,13 +1,24 @@
 keys:
   - &admin age13ac790x07048t9ll0v2kusav2dj7yqdmd9ggw90w282jewql9szqfd3wh3
   - &hyperv age1y4jky5jyvnf72mnkez2lzht2lsdjnqlmgrec6z6ldptjrggn2pfs83889q
+  - &nealdesk age1hdu8j9gn3yz9kc87damm9r4afwgmkwpx0x3a7x872c60e4ux7eaqvcr22r
+
 creation_rules:
-  - path_regex: ^hosts/[^/]+/secrets/.*\.yaml$
-    key_groups:
-      - age: [*admin]
-  - path_regex: secrets/[^/]+\.yaml$
+  # Per-host secrets: only that host and you.
+  - path_regex: ^hosts/hyperv/secrets/.*\.yaml$
     key_groups:
       - age: [*admin, *hyperv]
-  - path_regex: ^(users/[^/]+/secrets/.*\.yaml)$
+
+  - path_regex: ^hosts/nealdesk/secrets/.*\.yaml$
     key_groups:
-      - age: [*admin, *hyperv]
+      - age: [*admin, *nealdesk]
+
+  # Shared across hosts (the user SSH key etc.) — every host needs these.
+  - path_regex: ^users/[^/]+/secrets/.*\.yaml$
+    key_groups:
+      - age: [*admin, *hyperv, *nealdesk]
+
+  # Admin-only: things no machine reads at runtime.
+  - path_regex: ^secrets/[^/]+\.yaml$
+    key_groups:
+      - age: [*admin, *hyperv, *nealdesk]
