@@ -98,9 +98,9 @@ nealos.disk.device = "/dev/disk/by-id/nvme-Samsung_SSD_990_PRO_1TB_S6...";
 The easiest install path is the one-shot `disko-install` flow, which does the
 layout + install in one go. It is a drop-in replacement for the manual `disko` and
 `nixos-install` steps below, so keep the existing fallback instructions around for
-cases where you want more control. The key part is the `--seed` flag: this is the
-correct way to preseed the SSH host key when the disk is being formatted and installed
-in the same pass, instead of trying to copy files into `/mnt` afterwards.
+cases where you want more control. The key part is using `--extra-files` to copy the
+pre-generated SSH host key directory into the target `/etc/ssh` before activation,
+instead of trying to copy files into `/mnt` afterwards.
 
 **2. Preferred: partition, format, and install with `disko-install`**
 
@@ -109,12 +109,12 @@ lsblk
 sudo nix run github:nix-community/disko/latest#disko-install -- \
   --flake .#<host> \
   --disk <disk-name> /dev/disk/by-id/<target-disk> \
-  --seed ./seed
+  --extra-files ./seed/etc/ssh /etc/ssh
 ```
 
 Use `lsblk` to confirm the disk name you want to target before the install starts. This
 is the shorter path for a host whose flake already contains the disko layout. It handles
-the format/mount step and then runs the install under the hood, and it preseeds the host
+the format/mount step and then runs the install under the hood, and it preloads the host
 key before activation so you do not have to manually move the key into `/mnt/etc/ssh`
 after the fact. If you use this path, you can skip the explicit `disko` and
 `nixos-install` commands in the manual steps below.
@@ -178,7 +178,7 @@ cd ~/nealos
 sudo nix run github:nix-community/disko/latest#disko-install -- \
   --flake .#<host> \
   --disk <disk-name> /dev/disk/by-id/<target-disk> \
-  --seed ./seed
+  --extra-files ./seed/etc/ssh /etc/ssh
 ```
 
 This is the easier path and is equivalent to doing the manual `disko` + `nixos-install`
