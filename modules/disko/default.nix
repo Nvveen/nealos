@@ -220,7 +220,10 @@ in
     # mkIf must sit on the devices set, not the leaf: a leaf-level mkIf still instantiates
     # the ${luksName} submodule, which lacks a `device` when encrypt = false.
     boot.initrd.luks.devices = lib.mkIf cfg.tpm {
-      ${luksName}.crypttabExtraOpts = [ "tpm2-device=auto" ];
+      ${luksName}.crypttabExtraOpts = [
+        "tpm2-device=auto"
+        "tpm2-measure-pcr=yes"
+      ];
     };
 
     # Only /home is snapshotted: the rest is rebuilt from the flake, and rolling

@@ -26,6 +26,7 @@
     "quiet"
     "systemd.show_status=false"
     "rd.systemd.show_status=false"
+    "usbcore.autosuspend=-1"
   ];
   boot.consoleLogLevel = 0;
   boot.initrd.verbose = false;

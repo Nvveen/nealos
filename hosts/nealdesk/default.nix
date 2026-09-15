@@ -1,6 +1,12 @@
-{ pkgs, ... }:
+{
+  inputs,
+  pkgs,
+  lib,
+  ...
+}:
 {
   imports = [
+    inputs.lanzaboote.nixosModules.lanzaboote
     ./hardware-configuration.nix
     ../../modules/common
     ../../modules/secrets
@@ -17,15 +23,23 @@
     device = "/dev/disk/by-id/nvme-eui.002538db11c3bf88";
     encrypt = true;
     hibernate = false;
-    tpm = false;
+    tpm = true;
     espSize = "2G";
     passwordFile = "/tmp/disko-password";
   };
 
   boot.initrd.systemd.enable = true;
 
-  boot.loader.systemd-boot.enable = true; # initial pre-enroll ba7l3qroot step
+  boot.loader.systemd-boot.enable = lib.mkForce false; # initial pre-enroll ba7l3qroot step
   boot.loader.efi.canTouchEfiVariables = true;
+
+  boot.lanzaboote = {
+    enable = true;
+    pkiBundle = "/var/lib/sbctl";
+    configurationLimit = 5;
+  };
+
+  boot.loader.timeout = 0;
 
   environment.systemPackages = [ pkgs.sbctl ];
 
