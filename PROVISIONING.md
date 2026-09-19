@@ -246,7 +246,7 @@ sudo tangd-keygen /var/db/tang
 Then confirm the server advertises its keys from the client LAN:
 
 ```bash
-curl http://192.168.68.57:7500/adv
+curl http://192.168.68.53:7500/adv
 ```
 
 Once the advertisement works, bind the LUKS root device from `nealdesk`:
@@ -254,7 +254,7 @@ Once the advertisement works, bind the LUKS root device from `nealdesk`:
 ```bash
 sudo clevis luks bind \
   -d /dev/disk/by-id/nvme-eui.002538db11c3bf88-part2 \
-  tang '{"url":"http://192.168.68.57:7500"}'
+  tang '{"url":"http://192.168.68.53:7500"}'
 ```
 
 Inspect or remove bindings with:
