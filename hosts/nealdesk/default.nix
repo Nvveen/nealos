@@ -28,7 +28,31 @@
     passwordFile = "/tmp/disko-password";
   };
 
-  boot.initrd.systemd.enable = true;
+  boot.initrd = {
+    systemd = {
+      enable = true;
+      network = {
+        enable = true;
+        networks."10-wired" = {
+          matchConfig.Name = [
+            "en*"
+            "eth*"
+          ];
+          networkConfig.DHCP = "ipv4";
+        };
+        wait-online = {
+          enable = true;
+          anyInterface = true;
+          timeout = 20;
+        };
+      };
+    };
+
+    clevisLuksAskpass = {
+      enable = true;
+      useTang = true;
+    };
+  };
 
   boot.loader.systemd-boot.enable = lib.mkForce false; # initial pre-enroll ba7l3qroot step
   boot.loader.efi.canTouchEfiVariables = true;
@@ -41,7 +65,10 @@
 
   boot.loader.timeout = 0;
 
-  environment.systemPackages = [ pkgs.sbctl ];
+  environment.systemPackages = [
+    pkgs.clevis
+    pkgs.sbctl
+  ];
 
   home-manager.sharedModules = [ ./hypr/hyprland.nix ];
 }

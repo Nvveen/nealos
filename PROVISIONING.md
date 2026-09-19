@@ -230,13 +230,50 @@ to verify it unlocks without prompting. A firmware update or Secure Boot change 
 the PCRs and drops you back to the passphrase — annoying, not a lockout, so long as you
 remember it.
 
-**2. Generate the user key:**
+**2. Enrol the Tang keyslot** (for hosts using LAN unlock). This is also not
+declarative: Clevis writes a binding token into the LUKS header. The NixOS config can
+be built before the Tang server is online, but binding needs the server to be reachable.
+
+Generate Tang server keys on the Tang server, not on the NixOS client. If the server is
+managed by a distro package, start the service first; many packaged units create missing
+keys on first start. For a manual setup:
+
+```bash
+sudo mkdir -p /var/db/tang
+sudo tangd-keygen /var/db/tang
+```
+
+Then confirm the server advertises its keys from the client LAN:
+
+```bash
+curl http://192.168.68.57:7500/adv
+```
+
+Once the advertisement works, bind the LUKS root device from `nealdesk`:
+
+```bash
+sudo clevis luks bind \
+  -d /dev/disk/by-id/nvme-eui.002538db11c3bf88-part2 \
+  tang '{"url":"http://192.168.68.57:7500"}'
+```
+
+Inspect or remove bindings with:
+
+```bash
+sudo clevis luks list -d /dev/disk/by-id/nvme-eui.002538db11c3bf88-part2
+sudo clevis luks unbind -d /dev/disk/by-id/nvme-eui.002538db11c3bf88-part2 -s <slot>
+```
+
+Reboot with Ethernet attached to verify network unlock. If the LAN, Tang server, or
+initrd networking is unavailable, the passphrase remains the recovery path.
+
+**3. Generate the user key:**
 
 ```bash
 ssh-keygen -t ed25519 -C "neal@$(hostname)" -f ~/.ssh/id_ed25519 -N ""
 ```
 
-**3. Register it with GitHub** — run this from an **existing, already-authenticated
+**4. Register it with GitHub** — run this from an **existing, already-authenticated
 host**, not the new one:
 
 ```bash
@@ -250,17 +287,17 @@ it. If gh lacks the scope: `gh auth refresh -h github.com -s admin:public_key`.
 For the *first* machine in a fresh fleet there's no existing host — do a one-off
 `gh auth login` locally, or paste the pubkey into the GitHub web UI.
 
-**4. Commit the pubkey** — the new host can push now, so it can do this itself:
+**5. Commit the pubkey** — the new host can push now, so it can do this itself:
 
 ```bash
 cp ~/.ssh/id_ed25519.pub ~/nealos/users/neal/keys/$(hostname).pub
 cd ~/nealos && git add users/neal/keys && git commit -m "Add $(hostname) user key" && git push
 ```
 
-**5. Rebuild the other hosts** so they accept SSH from the new machine. Nothing
+**6. Rebuild the other hosts** so they accept SSH from the new machine. Nothing
 happens on a `git pull` alone.
 
-**6. If hibernation is enabled**, get the swapfile offset and add it to
+**7. If hibernation is enabled**, get the swapfile offset and add it to
 `boot.kernelParams`:
 
 ```bash
