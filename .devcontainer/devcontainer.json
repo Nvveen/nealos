@@ -1,0 +1,31 @@
+{
+  "name": "nealos",
+  "image": "ghcr.io/nvveen/nealos-devcontainer:latest",
+  "containerUser": "root",
+  "remoteUser": "neal",
+  "updateRemoteUserUID": false,
+  "runArgs": ["--name=nealos-devcontainer"],
+  "overrideCommand": false,
+  "init": true,
+  "postStartCommand": "/nix/var/nix/profiles/per-user/root/devcontainer-home/activate",
+  "remoteEnv": {
+    "HOME": "/home/neal",
+    "USER": "neal",
+    "LOGNAME": "neal",
+    "EDITOR": "nvim",
+    "NIX_REMOTE": "daemon",
+    "HOME_MANAGER_BACKUP_EXT": "bak",
+    "PATH": "/home/neal/.nix-profile/bin:${containerEnv:PATH}"
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": ["jnoortheen.nix-ide"],
+      "settings": {
+        "terminal.integrated.defaultProfile.linux": "fish",
+        "terminal.integrated.profiles.linux": {
+          "fish": { "path": "/home/neal/.nix-profile/bin/fish" }
+        }
+      }
+    }
+  }
+}

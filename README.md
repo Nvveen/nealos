@@ -116,6 +116,56 @@ Update one input:
 Bare `nix flake update` bumps every input, which usually means rebuilding far
 more than intended.
 
+## Devcontainer
+
+Open this repository with VS Code's **Reopen in Container** command. The
+configuration pulls `ghcr.io/nvveen/nealos-devcontainer:latest`, which contains
+the shared headless tools, Fish configuration and development profile.
+
+The Dockerfile uses `nixos/nix:latest` and builds the existing Home Manager
+configuration. The repository is copied only into the build stage; the final
+image contains the Home Manager closure, not the checkout. The root-owned Nix
+daemon manages builds, and the `neal` user's tools and dotfiles come from Home
+Manager. The base follows the `latest` tag.
+
+Only tags matching `devcontainer-v*` and manual **Devcontainer** workflow runs
+build and check the image. Ordinary pushes and pull requests do not build it.
+Tagged releases publish the version (for example, `v1.0.0`) and `latest` to GHCR;
+manual runs on the default branch publish `latest`. Publishing uses the workflow's
+`GITHUB_TOKEN`; no additional registry secret is needed.
+
+Release an image from the desired commit:
+
+  git tag devcontainer-v1.0.0
+  git push origin devcontainer-v1.0.0
+
+After the first publication, set the package's
+visibility to **Public** in GitHub so other projects can pull without credentials.
+The first publication must complete before the registry-based devcontainer can
+be opened.
+
+Other projects can use the same image with `remoteUser: "neal"` and
+`updateRemoteUserUID: false` in their devcontainer configuration. Start the Nix
+daemon and activate Home Manager as configured in this repository's
+`.devcontainer/devcontainer.json`. The image is x86_64-only and uses UID/GID
+1000; mounted workspaces must be writable by that account. Recreate the
+container to pick up image updates.
+
+VS Code forwards a running SSH agent automatically. Load your existing key into
+the host agent and verify it inside the container with `ssh-add -l`. For a remote
+VS Code connection, the agent must already be forwarded to that remote host.
+No private keys or host secrets are included in the image or need registering
+for the container. Only forward the agent into trusted containers.
+
+Build locally with Docker:
+
+  docker build --progress=plain -f hosts/devcontainer/Dockerfile -t nealos-devcontainer:local .
+
+The Dockerfile builds Home Manager in a temporary builder stage and copies only
+its Nix store closure to the final image; the repository itself is mounted by
+VS Code when the container starts. Home Manager's activation package is also available as
+`nix build .#homeConfigurations.devcontainer.activationPackage`.
+
 ## Conventions
 
 - **Commit before rebuilding.** Nix reads the git index for a dirty tree.

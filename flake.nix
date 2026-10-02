@@ -89,6 +89,7 @@
             (homeManagerDefaults hostInputs)
           ];
         };
+
     in
     {
       nixosConfigurations.hyperv = mkHost {
@@ -130,6 +131,20 @@
         ];
       };
 
+      homeConfigurations.devcontainer = home-manager.lib.homeManagerConfiguration {
+        pkgs = nixpkgs.legacyPackages.x86_64-linux;
+        extraSpecialArgs = {
+          inherit inputs palette;
+        };
+        modules = [
+          ./users/neal/user.nix
+          ./users/neal/dotfiles
+          ./hosts/devcontainer
+        ];
+      };
+
+      packages.x86_64-linux.devcontainer = self.homeConfigurations.devcontainer.activationPackage;
+      packages.x86_64-linux.coreutils = nixpkgs.legacyPackages.x86_64-linux.coreutils;
       packages.x86_64-linux.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
     };
 }
