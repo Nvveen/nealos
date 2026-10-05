@@ -40,19 +40,7 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  # Packages every machine gets. To search: nix search nixpkgs <term>
-  environment.systemPackages = with pkgs; [
-    btop
-    file
-    git
-    jq
-    nixd
-    nixfmt
-    ripgrep
-    sops
-    ssh-to-age
-    wget
-  ];
+  environment.systemPackages = import ./packages.nix pkgs;
 
   # Required so fish lands in /etc/shells and gets its system-wide completions/vendor setup.
   programs.fish.enable = true;

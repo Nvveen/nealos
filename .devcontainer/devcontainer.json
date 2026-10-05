@@ -1,0 +1,5 @@
+{
+  "name": "nealbox",
+  "image": "ghcr.io/nvveen/nealbox:latest",
+  "runArgs": ["--hostname=nealbox", "--name=nealbox-nealos"]
+}

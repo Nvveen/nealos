@@ -127,6 +127,9 @@
         modules = [
           ./users/neal/user.nix
           ./users/neal/dotfiles
+          ./modules/common/home/shell
+          ./modules/common/home/standalone.nix
+          ./modules/profiles/development/home
         ];
       };
 

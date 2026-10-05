@@ -13,7 +13,8 @@
     ../../modules/disko
     ../../modules/desktop
     ../../modules/profiles/development/nixos
-    ../../users/neal/nixos.nix
+    ../../users/neal
+    ../../users/neal/sops.nix
   ];
 
   networking.hostName = "nealdesk";
