@@ -89,7 +89,6 @@
             (homeManagerDefaults hostInputs)
           ];
         };
-
     in
     {
       nixosConfigurations.hyperv = mkHost {
@@ -131,39 +130,6 @@
         ];
       };
 
-      homeConfigurations.devcontainer = home-manager.lib.homeManagerConfiguration {
-        pkgs = nixpkgs.legacyPackages.x86_64-linux;
-        extraSpecialArgs = {
-          inherit inputs palette;
-        };
-        modules = [
-          ./users/neal/user.nix
-          ./users/neal/dotfiles
-          ./hosts/devcontainer
-        ];
-      };
-
-      packages.x86_64-linux.devcontainer = self.homeConfigurations.devcontainer.activationPackage;
-      # Base tools every NixOS host gets, for the devcontainer's global profile.
-      packages.x86_64-linux.devcontainer-system-tools =
-        let
-          pkgs = nixpkgs.legacyPackages.x86_64-linux;
-          nixos =
-            (nixpkgs.lib.nixosSystem {
-              modules = [ { nixpkgs.hostPlatform = "x86_64-linux"; } ];
-            }).config.environment;
-          common = import ./modules/common {
-            inherit pkgs;
-            inherit (nixpkgs) lib;
-            inputs = commonInputs;
-          };
-        in
-        pkgs.buildEnv {
-          name = "nealos-system-tools";
-          paths = nixos.corePackages ++ nixos.defaultPackages ++ common.environment.systemPackages;
-          pathsToLink = [ "/bin" "/sbin" ];
-          ignoreCollisions = true;
-        };
       packages.x86_64-linux.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
     };
 }

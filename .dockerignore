@@ -1,8 +1,0 @@
-.git
-.github
-.sops.yaml
-**/secrets
-secrets
-result
-result-*
-logs_*.zip
