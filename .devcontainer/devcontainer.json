@@ -1,0 +1,15 @@
+{
+  "name": "nealbox",
+  "image": "ghcr.io/nvveen/nealbox:latest",
+  "runArgs": [
+    "--hostname=nealbox-nealos",
+    "--name=nealbox-nealos"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "jnoortheen.nix-ide"
+      ]
+    }
+  }
+}

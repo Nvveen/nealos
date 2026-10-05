@@ -1,0 +1,13 @@
+{
+    "id": "nealbox",
+    "version": "1.0.0",
+    "name": "nealbox",
+    "description": "Debian + Nix + home-manager from nealos",
+    "options": {
+        "imageTag": {
+            "type": "string",
+            "default": "latest",
+            "description": "nealbox image tag"
+        }
+    }
+}

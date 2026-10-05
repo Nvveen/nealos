@@ -1,0 +1,4 @@
+# Keep the build context to the flake sources only.
+.git
+result*
+.direnv

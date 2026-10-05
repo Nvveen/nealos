@@ -127,9 +127,14 @@
         modules = [
           ./users/neal/user.nix
           ./users/neal/dotfiles
+          ./modules/common/home/shell
+          ./modules/common/home/standalone.nix
+          ./modules/profiles/development/home
         ];
       };
 
-      packages.x86_64-linux.iso = self.nixosConfigurations.installer.config.system.build.isoImage;
+      packages.x86_64-linux = {
+        iso = self.nixosConfigurations.installer.config.system.build.isoImage;
+      };
     };
 }

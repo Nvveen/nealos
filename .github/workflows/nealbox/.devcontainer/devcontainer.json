@@ -1,0 +1,14 @@
+{
+  "name": "nealbox",
+  // ${templateOption:imageTag} is filled in when the template is applied.
+  "image": "ghcr.io/nvveen/nealbox:${templateOption:imageTag}",
+  "runArgs": [
+    "--hostname=nealbox",
+    "--name=nealbox-${localWorkspaceFolderBasename}"
+  ],
+  "customizations": {
+    "vscode": {
+      "extensions": []
+    }
+  }
+}

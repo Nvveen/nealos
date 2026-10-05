@@ -40,19 +40,7 @@
     LC_TIME = "nl_NL.UTF-8";
   };
 
-  # Packages every machine gets. To search: nix search nixpkgs <term>
-  environment.systemPackages = with pkgs; [
-    btop
-    file
-    git
-    jq
-    nixd
-    nixfmt
-    ripgrep
-    sops
-    ssh-to-age
-    wget
-  ];
+  environment.systemPackages = (import ./packages.nix pkgs).common;
 
   # Required so fish lands in /etc/shells and gets its system-wide completions/vendor setup.
   programs.fish.enable = true;
@@ -73,14 +61,6 @@
       PasswordAuthentication = lib.mkDefault false;
       KbdInteractiveAuthentication = lib.mkDefault false;
       PermitRootLogin = lib.mkDefault "no";
-    };
-  };
-
-  programs.nh = {
-    enable = true;
-    clean = {
-      enable = true;
-      extraArgs = "--keep-since 30d --keep 5";
     };
   };
 }

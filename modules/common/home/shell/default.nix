@@ -97,6 +97,7 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
+    config.whitelist.prefix = ["/workspaces"];
   };
 
   programs.delta.enable = true;

@@ -105,6 +105,11 @@ Rebuild a host:
 
     sudo nixos-rebuild switch --flake .#<host>
 
+Build and load the nealbox development image:
+
+    nix build .#nealbox
+    docker load < result
+
 Install dotfiles on a non-NixOS machine:
 
     nix run home-manager/master -- switch --flake github:<you>/nealos#<user>

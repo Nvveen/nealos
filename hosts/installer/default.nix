@@ -9,13 +9,7 @@
     (
       { pkgs, lib, ... }:
       {
-        environment.systemPackages = with pkgs; [
-          rsync
-          git
-          sops
-          age
-          ssh-to-age
-        ];
+        environment.systemPackages = (import ../../modules/common/packages.nix pkgs).common;
 
         users.users.root = {
           initialHashedPassword = lib.mkForce null;
