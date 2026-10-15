@@ -1,11 +1,12 @@
 {
-  "name": "nealbox",
-  // ${templateOption:imageTag} is filled in when the template is applied.
+  "name": "nealbox-${localWorkspaceFolderBasename}",
   "image": "ghcr.io/nvveen/nealbox:${templateOption:imageTag}",
   "runArgs": [
-    "--hostname=nealbox",
-    "--name=nealbox-${localWorkspaceFolderBasename}"
+    "--hostname=nealbox-${localWorkspaceFolderBasename}",
+    "--name=nealbox-${localWorkspaceFolderBasename}",
+    "--restart=unless-stopped"
   ],
+  "shutdownAction": "none",
   "customizations": {
     "vscode": {
       "extensions": []

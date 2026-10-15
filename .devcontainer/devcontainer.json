@@ -1,10 +1,12 @@
 {
-  "name": "nealbox",
+  "name": "nealbox-nealos",
   "image": "ghcr.io/nvveen/nealbox:latest",
   "runArgs": [
     "--hostname=nealbox-nealos",
-    "--name=nealbox-nealos"
+    "--name=nealbox-${localWorkspaceFolderBasename}",
+    "--restart=unless-stopped"
   ],
+  "shutdownAction": "none",
   "customizations": {
     "vscode": {
       "extensions": [
