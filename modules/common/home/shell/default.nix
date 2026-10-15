@@ -8,7 +8,10 @@ let
   };
 in
 {
-  imports = [ ./starship ];
+  imports = [
+    ./starship
+    ./tmux
+  ];
   home.packages = with pkgs; [
     bat # cat with syntax highlighting
     delta # diff viewer, used by lazygit

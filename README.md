@@ -101,6 +101,10 @@ hardcoding colours.
 
 ## Usage
 
+Interactive shells automatically attach to tmux without nesting. See the
+[tmux commands and workflows](./modules/common/home/shell/tmux/README.md) for
+keybindings, session saving/restoring with lazy-tmux, and opting out.
+
 Rebuild a host:
 
     sudo nixos-rebuild switch --flake .#<host>

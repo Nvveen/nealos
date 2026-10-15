@@ -1,6 +1,6 @@
 # The build-time palette. Used by anything that must know its colours before a
 # user session exists (SDDM, Plymouth) or that can't follow noctalia at runtime
-# (the shell prompt).
+# (the shell prompt and tmux).
 #
 # Runtime theming — Hyprland, foot, GTK, Firefox, neovim — does NOT come from
 # here. Noctalia owns that, and switching palette in its UI retheme those live.
@@ -9,7 +9,7 @@
 let
   repo = inputs.community-palettes;
 
-  # Change this to reskin SDDM, Plymouth and the prompt.
+  # Change this to reskin SDDM, Plymouth, the prompt and tmux.
   default = "Osaka jade";
 
   slug = n: lib.toLower (builtins.replaceStrings [ " " ] [ "-" ] n);
