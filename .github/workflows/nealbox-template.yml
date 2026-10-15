@@ -11,22 +11,18 @@ jobs:
       contents: read
       packages: write
     steps:
-      # CHANGED: checkout again, since the template files now live in the repo.
       - uses: actions/checkout@v4
 
-      # NEW: stamp the run number into the version, so each publish is a new
-      # version and the JSON never needs a manual bump.
+      # Stamp the run number into the version so each publish is a new version.
       - name: Set template version
         run: |
-          f=.github/workflows/nealbox/devcontainer-template.json
+          f=.devcontainer/templates/nealbox/devcontainer-template.json
           jq '.version = "1.0.${{ github.run_number }}"' "$f" > "$f.tmp" && mv "$f.tmp" "$f"
 
-      # Publishes to ghcr.io/nvveen/nealos/nealbox. The action publishes each
-      # <base path>/<id>/ directory; the workflow .yml files beside it are ignored.
+      # Publishes the template directories under the configured base path.
       - uses: devcontainers/action@v1
         with:
           publish-templates: "true"
-          # CHANGED: the template sits next to this workflow.
-          base-path-to-templates: ./.github/workflows
+          base-path-to-templates: ./.devcontainer/templates
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

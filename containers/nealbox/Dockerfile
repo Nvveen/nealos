@@ -1,5 +1,5 @@
 # nealbox: Debian + Nix + home-manager from the nealos flake.
-# Build from the repo root: docker build -f hosts/nealbox/Dockerfile -t ghcr.io/nvveen/nealbox .
+# Build from the repo root: docker build -f containers/nealbox/Dockerfile -t ghcr.io/nvveen/nealbox .
 FROM debian:trixie-slim
 
 # bash with pipefail, so a failed curl in a pipe fails the build.
