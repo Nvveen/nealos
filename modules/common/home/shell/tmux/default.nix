@@ -5,7 +5,7 @@ let
   lazy = lib.getExe lazyTmux;
   autoStart = ''
     if [[ -z "''${TMUX-}" && "''${NEALOS_NO_TMUX-}" != 1 && -n "''${TERM-}" && "$TERM" != dumb && -t 0 && -t 1 ]]; then
-      ${tmux} new-session -A -s main
+      exec ${tmux} new-session
     fi
   '';
 in
@@ -41,6 +41,14 @@ in
     '';
   };
 
+  programs.sesh = {
+    enable = true;
+    enableTmuxIntegration = true;
+    tmuxKey = "s";
+  };
+
+  programs.fzf.tmux.enableShellIntegration = true;
+
   programs.bash = {
     enable = true;
     initExtra = lib.mkAfter autoStart;
@@ -48,7 +56,7 @@ in
   programs.zsh.initContent = lib.mkAfter autoStart;
   programs.fish.interactiveShellInit = lib.mkAfter ''
     if test -z "$TMUX"; and test "$NEALOS_NO_TMUX" != 1; and test -n "$TERM"; and test "$TERM" != dumb; and isatty stdin; and isatty stdout
-      ${tmux} new-session -A -s main
+      exec ${tmux} new-session
     end
   '';
 }
