@@ -10,7 +10,11 @@
   "customizations": {
     "vscode": {
       "extensions": [
-        "jnoortheen.nix-ide"
+        "jnoortheen.nix-ide",
+        "mkhl.direnv",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "davidanson.vscode-markdownlint"
       ]
     }
   }
