@@ -55,7 +55,13 @@ in
   };
   programs.zsh.initContent = lib.mkAfter autoStart;
   programs.fish.interactiveShellInit = lib.mkAfter ''
-    if test -z "$TMUX"; and test "$NEALOS_NO_TMUX" != 1; and test -n "$TERM"; and test "$TERM" != dumb; and isatty stdin; and isatty stdout
+    if test -z "$TMUX" \
+        && test "$NEALOS_NO_TMUX" != 1 \
+        && test "$TERM_PROGRAM" != vscode \
+        && test -n "$TERM" \
+        && test "$TERM" != dumb \
+        && isatty stdin \
+        && isatty stdout
       exec ${tmux} new-session
     end
   '';
