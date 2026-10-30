@@ -27,4 +27,20 @@ COPY --chown=neal . /tmp/nealos
 RUN nix run home-manager -- switch -b backup --flake path:/tmp/nealos#neal \
  && sudo usermod -s /home/neal/.nix-profile/bin/fish neal
 
+# VS Code settings/extensions merged into every devcontainer.json using this image
+# (a project's own values win). The agent's terminal loads the workspace's direnv
+# env (if any) before its first command.
+LABEL devcontainer.metadata='[{ "customizations": { "vscode": { \
+  "extensions": ["jnoortheen.nix-ide"], \
+  "settings": { \
+    "nix.formatterPath": "nixfmt", \
+    "nix.enableLanguageServer": true, \
+    "nix.serverPath": "nixd", \
+    "terminal.integrated.fontFamily": "JetBrainsMono Nerd Font Mono, monospace", \
+    "terminal.integrated.defaultProfile.linux": "fish", \
+    "chat.tools.terminal.terminalProfile.linux": { "path": "fish", "args": ["-C", "direnv export fish | source"] }, \
+    "[nix]": { "editor.defaultFormatter": "jnoortheen.nix-ide", "editor.formatOnSave": false } \
+  } \
+} } }]'
+
 CMD ["/home/neal/.nix-profile/bin/fish", "-l"]
