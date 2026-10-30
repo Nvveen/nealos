@@ -17,6 +17,11 @@ jobs:
       packages: write
     steps:
       - uses: actions/checkout@v4
+      # VS Code settings for every devcontainer using the image, from this repo's
+      # workspace settings (must stay plain JSON, no comments).
+      - id: meta
+        run: |
+          echo "json=$(jq -c '[{customizations: {vscode: {extensions: ["jnoortheen.nix-ide"], settings: .}}}]' .vscode/settings.json)" >> "$GITHUB_OUTPUT"
       # buildx is required for the GitHub Actions layer cache.
       - uses: docker/setup-buildx-action@v3
       - uses: docker/login-action@v3
@@ -28,6 +33,7 @@ jobs:
         with:
           context: .
           file: containers/nealbox/Dockerfile
+          labels: devcontainer.metadata=${{ steps.meta.outputs.json }}
           push: true
           tags: |
             ghcr.io/nvveen/nealbox:latest
