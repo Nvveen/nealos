@@ -104,7 +104,12 @@ in
   programs.direnv = {
     enable = true;
     nix-direnv.enable = true;
-    config.whitelist.prefix = [ "/workspaces" ];
+    config = {
+      whitelist.prefix = [ "/workspaces" ];
+      global = {
+        hide_env_diff = true;
+      };
+    };
   };
 
   programs.delta.enable = true;
